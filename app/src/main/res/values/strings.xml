@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">PathFinder</string>
+
+    <string name="find_path_button">Find</string>
+    <string name="home_activity_content">PathFinder</string>
+    <string name="destination_place_hint_message">Destination</string>
+    <string name="start_place_hint_message">Starting point</string>
+</resources>
