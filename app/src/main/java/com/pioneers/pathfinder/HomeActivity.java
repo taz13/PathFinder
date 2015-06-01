@@ -81,7 +81,7 @@ public class HomeActivity extends Activity {
 
         setContentView(R.layout.activity_home);
 
-        final View controlsView = findViewById(R.id.fullscreen_content_controls);
+        //final View controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.fullscreen_content);
 
         // Set up an instance of SystemUiHider to control the system UI for
@@ -97,27 +97,30 @@ public class HomeActivity extends Activity {
                     @Override
                     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
                     public void onVisibilityChange(boolean visible) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2)
+//                        {
                             // If the ViewPropertyAnimator API is available
                             // (Honeycomb MR2 and later), use it to animate the
                             // in-layout UI controls at the bottom of the
                             // screen.
-                            if (mControlsHeight == 0) {
-                                mControlsHeight = controlsView.getHeight();
-                            }
-                            if (mShortAnimTime == 0) {
-                                mShortAnimTime = getResources().getInteger(
-                                        android.R.integer.config_shortAnimTime);
-                            }
-                            controlsView.animate()
-                                    .translationY(visible ? 0 : mControlsHeight)
-                                    .setDuration(mShortAnimTime);
-                        } else {
-                            // If the ViewPropertyAnimator APIs aren't
-                            // available, simply show or hide the in-layout UI
-                            // controls.
-                            controlsView.setVisibility(visible ? View.VISIBLE : View.GONE);
-                        }
+//                            if (mControlsHeight == 0)
+//                            {
+//                                mControlsHeight = controlsView.getHeight();
+//                            }
+//                            if (mShortAnimTime == 0)
+//                            {
+//                                mShortAnimTime = getResources().getInteger(
+//                                        android.R.integer.config_shortAnimTime);
+//                            }
+//                            controlsView.animate().translationY(visible ? 0 : mControlsHeight).setDuration(mShortAnimTime);
+//                        }
+//                        else
+//                        {
+//                            // If the ViewPropertyAnimator APIs aren't
+//                            // available, simply show or hide the in-layout UI
+//                            // controls.
+//                            controlsView.setVisibility(visible ? View.VISIBLE : View.GONE);
+//                        }
 
                         // Schedule a hide().
                         if (visible) delayedHide(AUTO_HIDE_DELAY_MILLIS);
@@ -125,16 +128,19 @@ public class HomeActivity extends Activity {
                 });
 
         // Set up the user interaction to manually show or hide the system UI.
-        contentView.setOnClickListener(view -> {
-            if (TOGGLE_ON_CLICK) {
-                mSystemUiHider.toggle();
-            } else mSystemUiHider.show();
+        contentView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (TOGGLE_ON_CLICK) {
+                    mSystemUiHider.toggle();
+                } else mSystemUiHider.show();
+            }
         });
 
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        findViewById(R.id.find_button).setOnTouchListener(findPathTouchListener);
+//        findViewById(R.id.find_button).setOnTouchListener(findPathTouchListener);
     }
 
     @Override
@@ -159,7 +165,7 @@ public class HomeActivity extends Activity {
     //onClick function for find_path button
     public void showPath(View view) {
         //going to mapPathFinderActivity
-        Intent intent = new Intent(this, HomeActivity.class);
+        Intent intent = new Intent(this, MapsPathFinderActivity.class);
         EditText startPlaceText = (EditText) findViewById(R.id.start_place_textbox);
         EditText destPlaceText = (EditText) findViewById(R.id.destination_place_textBox);
 

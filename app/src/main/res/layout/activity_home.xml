@@ -25,11 +25,11 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center">
-
+            android:layout_gravity="center"
+            android:fitsSystemWindows="true">
             <EditText android:id="@+id/start_place_textbox"
                 style="@android:style/Widget.Holo.EditText"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="false"
                 android:layout_alignParentTop="true"
@@ -37,20 +37,37 @@
                 android:layout_marginTop="90dp"
                 android:background="@color/wallet_bright_foreground_holo_dark"
                 android:hint="@string/start_place_hint_message"
-                android:textSize="18dp" />
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="#ff0a1c25"
+                android:textSize="30sp" />
 
             <EditText android:id="@+id/destination_place_textBox"
                 style="@android:style/Widget.Holo.EditText"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/start_place_textbox"
-                android:layout_alignParentEnd="false"
                 android:layout_alignStart="@+id/start_place_textbox"
                 android:layout_below="@+id/start_place_textbox"
-                android:layout_marginTop="58dp"
+                android:layout_marginTop="31dp"
                 android:background="@color/wallet_bright_foreground_holo_dark"
                 android:hint="@string/destination_place_hint_message"
-                android:textSize="18dp" />
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="#ff0a1c25"
+                android:textSize="30sp" />
+
+            <RadioButton
+                android:id="@+id/getMyPlace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="127dp"
+                android:clickable="true"
+                android:enabled="true"
+                android:text="@string/current_place"
+                android:textColor="#ffffffff" />
 
 
         </RelativeLayout>
@@ -66,8 +83,10 @@
                 android:layout_weight="1"
                 android:background="#ff1e4f6d"
                 android:clickable="true"
-                android:text="@string/find_path_button" />
-
+                android:onClick="showPath"
+                android:text="@string/find_path_button"
+                android:textSize="40sp"
+                android:textStyle="normal|bold" />
         </LinearLayout>
     </FrameLayout>
 
