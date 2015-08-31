@@ -2,6 +2,7 @@ package com.pioneers.pathfinder;
 
 import android.app.Activity;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,6 +24,11 @@ import com.pioneers.pathfinder.fragments.BusStopsFragment;
 import com.pioneers.pathfinder.fragments.CheapestPathFragment;
 import com.pioneers.pathfinder.fragments.SettingsFragment;
 import com.pioneers.pathfinder.fragments.ShortestPathFragment;
+import com.pioneers.pathfinder.util.ApiConnector;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class PathFinderActivity extends AppCompatActivity implements ShortestPathFragment.OnFragmentInteractionListener,
@@ -75,7 +81,8 @@ public class PathFinderActivity extends AppCompatActivity implements ShortestPat
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
 
-
+        //creating a new async task
+        new GetBusStopTask().execute(new ApiConnector());
 
     }
 
@@ -110,5 +117,47 @@ public class PathFinderActivity extends AppCompatActivity implements ShortestPat
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+//    public void setTextToTextView(JSONArray jsonArray)
+//    {
+//        String s  = "";
+//        for(int i=0; i<jsonArray.length();i++){
+//
+//            JSONObject json = null;
+//            try {
+//                json = jsonArray.getJSONObject(i);
+//                s = s +
+//                        "Name : "+json.getString("FirstName")+" "+json.getString("LastName")+"\n"+
+//                        "Age : "+json.getInt("Age")+"\n"+
+//                        "Mobile Using : "+json.getString("Mobile")+"\n\n";
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+//
+//       // this.responseTextView.setText(s); //Do all the c
+//    }
+
+    private class GetBusStopTask extends AsyncTask<ApiConnector, Long,JSONArray>
+    {
+
+        @Override
+        protected JSONArray doInBackground(ApiConnector... params)
+        {
+            //It is executed on Background thread
+
+           return params[0].GetAllCustomers();
+        }
+
+        @Override
+        protected void onPostExecute(JSONArray jsonArray)
+        {
+            //It is executed on the main thread
+
+            //setTextToTextView(jsonArray);
+            //Do all the functionalities here
+        }
     }
 }
