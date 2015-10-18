@@ -34,7 +34,8 @@ import org.json.JSONObject;
 public class PathFinderActivity extends AppCompatActivity implements ShortestPathFragment.OnFragmentInteractionListener,
                                                                         CheapestPathFragment.OnFragmentInteractionListener,
                                                                         BusStopsFragment.OnFragmentInteractionListener,
-                                                                        SettingsFragment.OnFragmentInteractionListener
+                                                                        SettingsFragment.OnFragmentInteractionListener,
+                                                                        View.OnClickListener
 {
 
     Toolbar toolbar;
@@ -116,6 +117,11 @@ public class PathFinderActivity extends AppCompatActivity implements ShortestPat
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onClick(View v) {
 
     }
 
