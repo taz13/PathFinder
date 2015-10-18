@@ -7,7 +7,7 @@
     <string name="start_place_hint_message">  Starting point  </string>
     <string name="title_activity_maps_path_finder">Map</string>
     <string name="current_place">My Place</string>
-    <string name="title_activity_path_finder">PathFinderActivity</string>
+    <string name="title_activity_path_finder">PathFinder</string>
 
     <string name="title_section1">Shortest route</string>
     <string name="title_section2">Cheapest route</string>
