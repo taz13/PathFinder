@@ -1,6 +1,7 @@
 package com.pioneers.pathfinder;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,13 +12,22 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.internal.widget.AdapterViewCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.pioneers.pathfinder.adapter.ViewPagerAdapter;
 import com.pioneers.pathfinder.common.libs.SlidingTabLayout;
 import com.pioneers.pathfinder.fragments.BusStopsFragment;
@@ -31,11 +41,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class PathFinderActivity extends AppCompatActivity implements ShortestPathFragment.OnFragmentInteractionListener,
-                                                                        CheapestPathFragment.OnFragmentInteractionListener,
-                                                                        BusStopsFragment.OnFragmentInteractionListener,
-                                                                        SettingsFragment.OnFragmentInteractionListener,
-                                                                        View.OnClickListener
+public class PathFinderActivity extends AppCompatActivity implements AdapterViewCompat.OnItemSelectedListener
 {
 
     Toolbar toolbar;
@@ -44,11 +50,12 @@ public class PathFinderActivity extends AppCompatActivity implements ShortestPat
     SlidingTabLayout tabs;
     CharSequence Titles[]={"Shortest Path","Cheapest Path","Find Bus stop","Settings"};
     int Numboftabs =4;
+    private Button findShortestPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_path_finder);
+        setContentView(R.layout.activity_path_finder_v2);
 
 
         // Creating The Toolbar and setting it as the Toolbar for the activity
@@ -59,31 +66,74 @@ public class PathFinderActivity extends AppCompatActivity implements ShortestPat
         //Changing Title from Toolbar
         getSupportActionBar().setTitle(R.string.app_name);
 
-        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-        adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,Numboftabs);
+        //Populating shortest path options
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                        R.array.path_options, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+                spinner.setAdapter(adapter);
 
-        // Assigning ViewPager View and setting the adapter
-        pager = (ViewPager) findViewById(R.id.pager);
-        pager.setAdapter(adapter);
+        //Adding event listener to the button
+        findShortestPath= (Button)findViewById(R.id.btnFindPath);
 
-        // Assiging the Sliding Tab Layout View
-        tabs = (SlidingTabLayout) findViewById(R.id.tabs);
-        tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+        //setting onclick listener for find shortest path button
 
+        findShortestPath.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    System.out.println("Shortest path found");
 
-        // Setting Custom Color for the Scroll bar indicator of the Tab View
-        tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+                                                    Intent showOnMap = new Intent(PathFinderActivity.this, MapsPathFinderActivity.class);
+                                                    startActivity(showOnMap);
+                                                }
+                                            });
+
+        //Auto complete code
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
-            public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.tabsScrollColor);
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Log.i("PathFinderActivity", "Place: " + place.getName());
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i("PathFinderActivity", "An error occurred: " + status);
             }
         });
-
-        // Setting the ViewPager For the SlidingTabsLayout
-        tabs.setViewPager(pager);
+//
+//        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
+//        adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,Numboftabs);
+//
+//        // Assigning ViewPager View and setting the adapter
+//        pager = (ViewPager) findViewById(R.id.pager);
+//        pager.setAdapter(adapter);
+//
+//        // Assiging the Sliding Tab Layout View
+//        tabs = (SlidingTabLayout) findViewById(R.id.tabs);
+//        tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+//
+//
+//        // Setting Custom Color for the Scroll bar indicator of the Tab View
+//        tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+//            @Override
+//            public int getIndicatorColor(int position) {
+//                return getResources().getColor(R.color.tabsScrollColor);
+//            }
+//        });
+//
+//        // Setting the ViewPager For the SlidingTabsLayout
+//        tabs.setViewPager(pager);
 
         //creating a new async task
-        new GetBusStopTask().execute(new ApiConnector());
+        //new GetBusStopTask().execute(new ApiConnector());
 
     }
 
@@ -110,18 +160,29 @@ public class PathFinderActivity extends AppCompatActivity implements ShortestPat
         return super.onOptionsItemSelected(item);
     }
 
+//    @Override
+//    public void onFragmentInteraction(String id) {
+//
+//    }
+//
+//    @Override
+//    public void onFragmentInteraction(Uri uri) {
+//
+//    }
+
+//    @Override
+//    public void onClick(View v)
+//    {
+//
+//    }
+
     @Override
-    public void onFragmentInteraction(String id) {
+    public void onItemSelected(AdapterViewCompat<?> parent, View view, int position, long id) {
 
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
-    public void onClick(View v) {
+    public void onNothingSelected(AdapterViewCompat<?> parent) {
 
     }
 
