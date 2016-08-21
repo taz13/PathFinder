@@ -31,12 +31,12 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" android:background="#ffffff">
 
-        <fragment
-            android:id="@+id/place_autocomplete_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-            />
+        <!--<fragment-->
+            <!--android:id="@+id/place_autocomplete_fragment"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"-->
+            <!--/>-->
         <!--  Header Starts-->
         <LinearLayout android:id="@+id/header"
             android:layout_width="fill_parent"
@@ -80,19 +80,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dip"
-            android:layout_below="@id/header">
+            android:layout_below="@id/header"
+            android:id="@+id/locationLayout">
             <!--  Email Label -->
-            <EditText android:layout_width="fill_parent"
+            <AutoCompleteTextView android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
                 android:layout_marginBottom="20dip"
                 android:hint="Source"
+                android:id="@+id/sourceText"
                 android:singleLine="true"/>
             <!--  Password Label -->
-            <EditText android:layout_width="fill_parent"
+            <AutoCompleteTextView android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
                 android:hint="Destination"
+                android:id="@+id/destText"
                 android:singleLine="true"
                 />
             <!-- Login button -->

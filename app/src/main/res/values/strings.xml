@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">PathFinder</string>
-
+    <string name="google_app_id">973948562269-1o9iddi19gh4b09mpkja33r1jl0odic9.apps.googleusercontent.com</string>
     <string name="find_path_button">Find</string>
     <string name="home_activity_content">PathFinder</string>
     <string name="destination_place_hint_message">  Destination  </string>

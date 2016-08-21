@@ -27,6 +27,8 @@ public class MapsPathFinderActivity extends FragmentActivity implements OnMapRea
     private GoogleMap mMap;
     private UiSettings settings;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

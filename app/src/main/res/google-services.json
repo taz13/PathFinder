@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "973948562269",
+    "project_id": "triple-course-111307"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:973948562269:android:93419aede04d85be",
+        "android_client_info": {
+          "package_name": "com.pioneers.pathfinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "973948562269-1o9iddi19gh4b09mpkja33r1jl0odic9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pioneers.pathfinder",
+            "certificate_hash": "93CAA64BA05E381D1B0EDA2875A8C9D3763EE72B"
+          }
+        },
+        {
+          "client_id": "973948562269-0opia2t13d3p1sqfh08lt25qaf4ecps7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDROXW9he36SJL1CC3PSKULTw_udJFBPF8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

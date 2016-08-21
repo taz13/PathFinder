@@ -1,47 +1,45 @@
 package com.pioneers.pathfinder;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.internal.widget.AdapterViewCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
-import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
+import com.pioneers.pathfinder.adapter.PlaceAutocompleteAdapter;
 import com.pioneers.pathfinder.adapter.ViewPagerAdapter;
 import com.pioneers.pathfinder.common.libs.SlidingTabLayout;
-import com.pioneers.pathfinder.fragments.BusStopsFragment;
-import com.pioneers.pathfinder.fragments.CheapestPathFragment;
-import com.pioneers.pathfinder.fragments.SettingsFragment;
-import com.pioneers.pathfinder.fragments.ShortestPathFragment;
 import com.pioneers.pathfinder.util.ApiConnector;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 
-public class PathFinderActivity extends AppCompatActivity implements AdapterViewCompat.OnItemSelectedListener
+public class PathFinderActivity extends AppCompatActivity implements AdapterViewCompat.OnItemSelectedListener,GoogleApiClient.OnConnectionFailedListener
 {
 
     Toolbar toolbar;
@@ -51,6 +49,17 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
     CharSequence Titles[]={"Shortest Path","Cheapest Path","Find Bus stop","Settings"};
     int Numboftabs =4;
     private Button findShortestPath;
+
+    //For auto complete location
+    protected GoogleApiClient mGoogleApiClient;
+
+    private PlaceAutocompleteAdapter mAdapter;
+
+    //private AutoCompleteTextView mAutocompleteView;
+
+    private AutoCompleteTextView mSourceTextView;
+
+    private AutoCompleteTextView mDestTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,23 +100,39 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
                                                 }
                                             });
 
-        //Auto complete code
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        //Auto complete location code
 
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-                Log.i("PathFinderActivity", "Place: " + place.getName());
-            }
+        // Construct a GoogleApiClient for the {@link Places#GEO_DATA_API} using AutoManage
+        // functionality, which automatically sets up the API client to handle Activity lifecycle
+        // events. If your activity does not extend FragmentActivity, make sure to call connect()
+        // and disconnect() explicitly.
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .build();
 
-            @Override
-            public void onError(Status status) {
-                // TODO: Handle the error.
-                Log.i("PathFinderActivity", "An error occurred: " + status);
-            }
-        });
+        // Retrieve the AutoCompleteTextView that will display Source place suggestions.
+        mSourceTextView = (AutoCompleteTextView)
+                findViewById(R.id.sourceText);
+
+        // Register a listener that receives callbacks when a suggestion has been selected
+        mSourceTextView.setOnItemClickListener(mAutocompleteClickListener);
+
+        // Retrieve the AutoCompleteTextView that will display Destination place suggestions.
+        mDestTextView = (AutoCompleteTextView)
+                findViewById(R.id.destText);
+
+        // Register a listener that receives callbacks when a suggestion has been selected
+        mDestTextView.setOnItemClickListener(mAutocompleteClickListener);
+
+        mAdapter = new PlaceAutocompleteAdapter(this, mGoogleApiClient,
+                null);
+        mSourceTextView.setAdapter(mAdapter);
+        mDestTextView.setAdapter(mAdapter);
+
+
+
 //
 //        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
 //        adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,Numboftabs);
@@ -160,22 +185,6 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
         return super.onOptionsItemSelected(item);
     }
 
-//    @Override
-//    public void onFragmentInteraction(String id) {
-//
-//    }
-//
-//    @Override
-//    public void onFragmentInteraction(Uri uri) {
-//
-//    }
-
-//    @Override
-//    public void onClick(View v)
-//    {
-//
-//    }
-
     @Override
     public void onItemSelected(AdapterViewCompat<?> parent, View view, int position, long id) {
 
@@ -184,6 +193,90 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
     @Override
     public void onNothingSelected(AdapterViewCompat<?> parent) {
 
+    }
+
+    private AdapterView.OnItemClickListener mAutocompleteClickListener
+            = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            /*
+             Retrieve the place ID of the selected item from the Adapter.
+             The adapter stores each Place suggestion in a AutocompletePrediction from which we
+             read the place ID and title.
+              */
+            final AutocompletePrediction item = mAdapter.getItem(position);
+            final String placeId = item.getPlaceId();
+            final CharSequence primaryText = item.getPrimaryText(null);
+
+            //Log.i(TAG, "Autocomplete item selected: " + primaryText);
+
+            /*
+             Issue a request to the Places Geo Data API to retrieve a Place object with additional
+             details about the place.
+              */
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                    .getPlaceById(mGoogleApiClient, placeId);
+            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+
+            Toast.makeText(getApplicationContext(), "Clicked: " + primaryText,
+                    Toast.LENGTH_SHORT).show();
+            //Log.i(TAG, "Called getPlaceById to get Place details for " + placeId);
+        }
+    };
+
+    /**
+     * Callback for results from a Places Geo Data API query that shows the first place result in
+     * the details view on screen.
+     */
+    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
+            = new ResultCallback<PlaceBuffer>() {
+        @Override
+        public void onResult(PlaceBuffer places) {
+            if (!places.getStatus().isSuccess()) {
+                // Request did not complete successfully
+//                Log.e(TAG, "Place query did not complete. Error: " + places.getStatus().toString());
+                places.release();
+                return;
+            }
+            // Get the Place object from the buffer.
+            final Place place = places.get(0);
+
+//            // Format details of the place for display and show it in a TextView.
+//            mPlaceDetailsText.setText(formatPlaceDetails(getResources(), place.getName(),
+//                    place.getId(), place.getAddress(), place.getPhoneNumber(),
+//                    place.getWebsiteUri()));
+
+            // Display the third party attributions if set.
+//            final CharSequence thirdPartyAttribution = places.getAttributions();
+//            if (thirdPartyAttribution == null) {
+//                mPlaceDetailsAttribution.setVisibility(View.GONE);
+//            } else {
+//                mPlaceDetailsAttribution.setVisibility(View.VISIBLE);
+//                mPlaceDetailsAttribution.setText(Html.fromHtml(thirdPartyAttribution.toString()));
+//            }
+
+//            Log.i(TAG, "Place details received: " + place.getName());
+
+            places.release();
+        }
+    };
+
+//    private static Spanned formatPlaceDetails(Resources res, CharSequence name, String id,
+//                                              CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
+////        Log.e(TAG, res.getString(R.string.place_details, name, id, address, phoneNumber,
+////                websiteUri));
+//        return Html.fromHtml(res.getString(R.string.place_details, name, id, address, phoneNumber,
+//                websiteUri));
+//
+//    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult)
+    {
+        // TODO(Developer): Check error code and notify the user of error state and resolution.
+        Toast.makeText(this,
+                "Could not connect to Google API Client: Error " + connectionResult.getErrorCode(),
+                Toast.LENGTH_SHORT).show();
     }
 
 //    public void setTextToTextView(JSONArray jsonArray)
