@@ -31,13 +31,6 @@
         android:layout_height="wrap_content"
         android:background="#ffffff">
 
-        <!--<fragment-->
-        <!--android:id="@+id/place_autocomplete_fragment"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"-->
-        <!--/>-->
-        <!--  Header Starts-->
         <LinearLayout
             android:id="@+id/header"
             android:layout_width="fill_parent"
@@ -55,27 +48,7 @@
                 android:layout_weight="0.63" />
             Logo Ends
         </LinearLayout>
-        <!--  Header Ends -->
 
-        <!-- Footer Start -->
-        <!-- Place footer next to header to set z-index property to minus value -->
-        <!--<LinearLayout android:id="@+id/footer"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@layout/header_gradient"-->
-        <!--android:paddingTop="5dip"-->
-        <!--android:paddingBottom="5dip"-->
-        <!--android:layout_alignParentBottom="true">-->
-        <!--&lt;!&ndash;Logo Start&ndash;&gt;-->
-        <!--<ImageView android:src="@drawable/bus_icon"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginLeft="10dip"/>-->
-        <!--&lt;!&ndash;Logo Ends&ndash;&gt;-->
-        <!--</LinearLayout>-->
-        <!-- Footer Ends -->
-
-        <!-- Login Form -->
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -84,7 +57,6 @@
             android:layout_below="@id/header"
             android:id="@+id/locationLayout">
 
-            <!--  Email Label -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
