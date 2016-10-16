@@ -15,6 +15,7 @@
     <uses-library android:name="com.google.android.maps" />
 
     <application
+        android:name=".util.PathFinderApplication"
         android:allowBackup="true"
         android:icon="@drawable/bus_icon"
         android:label="@string/app_name"
@@ -51,6 +52,7 @@
             android:name=".MapsPathFinderActivity"
             android:label="@string/title_activity_maps_path_finder" >
         </activity>
+        <activity android:name=".MapsActivity"></activity>
     </application>
 
 </manifest>

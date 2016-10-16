@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -60,7 +61,11 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
     private AutoCompleteTextView mSourceTextView;
 
     private AutoCompleteTextView mDestTextView;
+    private Button btnClearSrc,btnClearDestination;
 
+    Double sourceLatitude, sourceLongitude,destinationLatitudde,destinationLongitude;
+
+    CharSequence sourceName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,9 +98,12 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
         findShortestPath.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
-                                                    System.out.println("Shortest path found");
-
-                                                    Intent showOnMap = new Intent(PathFinderActivity.this, MapsPathFinderActivity.class);
+                                                    Log.d("PathFinder","Shortest path found");
+                                                    Intent showOnMap = new Intent(PathFinderActivity.this, MapsActivity.class);
+                                                    showOnMap.putExtra("SourceLat",sourceLatitude);
+                                                    showOnMap.putExtra("SourceLong", sourceLongitude);
+                                                    showOnMap.putExtra("DestinationLat",destinationLatitudde);
+                                                    showOnMap.putExtra("DestinationLong",destinationLongitude);
                                                     startActivity(showOnMap);
                                                 }
                                             });
@@ -113,23 +121,42 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
                 .build();
 
         // Retrieve the AutoCompleteTextView that will display Source place suggestions.
-        mSourceTextView = (AutoCompleteTextView)
-                findViewById(R.id.sourceText);
+        mSourceTextView = (AutoCompleteTextView) findViewById(R.id.sourceText);
 
         // Register a listener that receives callbacks when a suggestion has been selected
         mSourceTextView.setOnItemClickListener(mAutocompleteClickListener);
 
         // Retrieve the AutoCompleteTextView that will display Destination place suggestions.
-        mDestTextView = (AutoCompleteTextView)
-                findViewById(R.id.destText);
+        mDestTextView = (AutoCompleteTextView) findViewById(R.id.destText);
 
         // Register a listener that receives callbacks when a suggestion has been selected
-        mDestTextView.setOnItemClickListener(mAutocompleteClickListener);
+        mDestTextView.setOnItemClickListener(mListen);
 
         mAdapter = new PlaceAutocompleteAdapter(this, mGoogleApiClient,
                 null);
         mSourceTextView.setAdapter(mAdapter);
         mDestTextView.setAdapter(mAdapter);
+
+        btnClearSrc = (Button) findViewById(R.id.btnClearSrc);
+        btnClearSrc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mSourceTextView.getText().toString().equals("")){
+                    mSourceTextView.setText("");
+                    Log.d("PathFinder", "Clicked");
+                }
+            }
+        });
+        btnClearDestination = (Button) findViewById(R.id.btnClearDestination);
+        btnClearDestination.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mDestTextView.getText().toString().equals("")){
+                    mDestTextView.setText("");
+                    Log.d("PathFinder", "Clicked");
+                }
+            }
+        });
 
 
 
@@ -213,13 +240,75 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
             /*
              Issue a request to the Places Geo Data API to retrieve a Place object with additional
              details about the place.
+
+    }
               */
             PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
                     .getPlaceById(mGoogleApiClient, placeId);
-            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+            placeResult.setResultCallback(new ResultCallback<PlaceBuffer>() {
+                @Override
+                public void onResult(@NonNull PlaceBuffer places) {
+                    if(places.getCount()==1){
+                        //Do the things here on Click.....
+                        sourceLatitude = places.get(0).getLatLng().latitude;
+                        sourceLongitude = places.get(0).getLatLng().longitude;
+                        CharSequence sourceName = places.get(0).getName();
 
-            Toast.makeText(getApplicationContext(), "Clicked: " + primaryText,
-                    Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Latitude:"+sourceLatitude+"Longitude:"+sourceLongitude,Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(getApplicationContext(),"SOMETHING_WENT_WRONG",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+          /*  Toast.makeText(getApplicationContext(), "Clicked: " + primaryText,
+                    Toast.LENGTH_SHORT).show();*/
+            //Log.i(TAG, "Called getPlaceById to get Place details for " + placeId);
+        }
+    };
+
+
+
+    private AdapterView.OnItemClickListener mListen
+            = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            /*
+             Retrieve the place ID of the selected item from the Adapter.
+             The adapter stores each Place suggestion in a AutocompletePrediction from which we
+             read the place ID and title.
+              */
+            final AutocompletePrediction item = mAdapter.getItem(position);
+            final String placeId = item.getPlaceId();
+            final CharSequence primaryText = item.getPrimaryText(null);
+
+            //Log.i(TAG, "Autocomplete item selected: " + primaryText);
+
+            /*
+             Issue a request to the Places Geo Data API to retrieve a Place object with additional
+             details about the place.
+
+    }
+              */
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                    .getPlaceById(mGoogleApiClient, placeId);
+            placeResult.setResultCallback(new ResultCallback<PlaceBuffer>() {
+                @Override
+                public void onResult(@NonNull PlaceBuffer places) {
+                    if(places.getCount()==1){
+                        //Do the things here on Click.....
+
+                        destinationLatitudde =  places.get(0).getLatLng().latitude;
+                        destinationLongitude = places.get(0).getLatLng().longitude;
+                        Toast.makeText(getApplicationContext(),"Latitude:"+sourceLatitude+"Longitude:"+sourceLongitude,Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(getApplicationContext(),"SOMETHING_WENT_WRONG",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+          /*  Toast.makeText(getApplicationContext(), "Clicked: " + primaryText,
+                    Toast.LENGTH_SHORT).show();*/
             //Log.i(TAG, "Called getPlaceById to get Place details for " + placeId);
         }
     };
@@ -227,8 +316,9 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
     /**
      * Callback for results from a Places Geo Data API query that shows the first place result in
      * the details view on screen.
+     *
      */
-    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
+   /* private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
             = new ResultCallback<PlaceBuffer>() {
         @Override
         public void onResult(PlaceBuffer places) {
@@ -239,6 +329,7 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
                 return;
             }
             // Get the Place object from the buffer.
+
             final Place place = places.get(0);
 
 //            // Format details of the place for display and show it in a TextView.
@@ -259,7 +350,7 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
 
             places.release();
         }
-    };
+    };*/
 
 //    private static Spanned formatPlaceDetails(Resources res, CharSequence name, String id,
 //                                              CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
