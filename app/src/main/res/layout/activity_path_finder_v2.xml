@@ -9,36 +9,30 @@
         android:id="@+id/tool_bar"
         layout="@layout/tool_bar"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        />
+        android:layout_width="match_parent" />
 
     <!--<com.pioneers.pathfinder.common.libs.SlidingTabLayout-->
-        <!--android:id="@+id/tabs"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:elevation="2dp"-->
-        <!--android:background="@color/ColorPrimary"/>-->
+    <!--android:id="@+id/tabs"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:elevation="2dp"-->
+    <!--android:background="@color/ColorPrimary"/>-->
 
     <!--<android.support.v4.view.ViewPager-->
-        <!--android:id="@+id/pager"-->
+    <!--android:id="@+id/pager"-->
 
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_weight="1"-->
-        <!--&gt;</android.support.v4.view.ViewPager>-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_weight="1"-->
+    <!--&gt;</android.support.v4.view.ViewPager>-->
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" android:background="#ffffff">
+        android:layout_height="wrap_content"
+        android:background="#ffffff">
 
-        <!--<fragment-->
-            <!--android:id="@+id/place_autocomplete_fragment"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"-->
-            <!--/>-->
-        <!--  Header Starts-->
-        <LinearLayout android:id="@+id/header"
+        <LinearLayout
+            android:id="@+id/header"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@layout/header_gradient"
@@ -46,82 +40,104 @@
             android:paddingBottom="5dip"
             android:weightSum="1">
             <!--Logo Start-->
-            <ImageView android:src="@drawable/bus_icon"
+            <ImageView
+                android:src="@drawable/bus_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
                 android:layout_weight="0.63" />
             Logo Ends
         </LinearLayout>
-        <!--  Header Ends -->
 
-        <!-- Footer Start -->
-        <!-- Place footer next to header to set z-index property to minus value -->
-        <!--<LinearLayout android:id="@+id/footer"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@layout/header_gradient"-->
-        <!--android:paddingTop="5dip"-->
-        <!--android:paddingBottom="5dip"-->
-        <!--android:layout_alignParentBottom="true">-->
-        <!--&lt;!&ndash;Logo Start&ndash;&gt;-->
-        <!--<ImageView android:src="@drawable/bus_icon"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginLeft="10dip"/>-->
-        <!--&lt;!&ndash;Logo Ends&ndash;&gt;-->
-        <!--</LinearLayout>-->
-        <!-- Footer Ends -->
-
-        <!-- Login Form -->
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dip"
             android:layout_below="@id/header"
             android:id="@+id/locationLayout">
-            <!--  Email Label -->
-            <AutoCompleteTextView android:layout_width="fill_parent"
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:layout_marginTop="5dip"
-                android:layout_marginBottom="20dip"
-                android:hint="Source"
-                android:id="@+id/sourceText"
-                android:singleLine="true"/>
-            <!--  Password Label -->
-            <AutoCompleteTextView android:layout_width="fill_parent"
+                android:layout_marginBottom="20dip">
+
+                <AutoCompleteTextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|left"
+                    android:hint="Source"
+                    android:id="@+id/sourceText"
+                    android:singleLine="true" />
+
+                <Button
+                    android:id="@+id/btnClearSrc"
+                    android:layout_width="35dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:drawableRight="@android:drawable/ic_menu_close_clear_cancel"
+                    android:background="@android:color/transparent"/>
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:layout_marginTop="5dip"
-                android:hint="Destination"
-                android:id="@+id/destText"
-                android:singleLine="true"
-                />
-            <!-- Login button -->
+                android:layout_marginBottom="20dip">
+
+                <AutoCompleteTextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|left"
+                    android:hint="Destination"
+                    android:id="@+id/destText"
+                    android:singleLine="true" />
+
+
+                <Button
+                    android:id="@+id/btnClearDestination"
+                    android:layout_width="35dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:drawableRight="@android:drawable/ic_menu_close_clear_cancel"
+                    android:background="@android:color/transparent"/>
+
+            </RelativeLayout>
 
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <Spinner
-                    android:layout_width="176dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/spinner" />
 
                 <TextView
-                    android:text="Path"
+                    android:text="Path Type :"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView2"
-                    android:textAppearance="@android:style/TextAppearance.Holo.Large" />
+                    android:textAppearance="@android:style/TextAppearance.Holo.Medium" />
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+                    android:focusableInTouchMode="true"/>
+
             </GridLayout>
 
 
-
-            <Button android:id="@+id/btnFindPath"
+            <Button
+                android:id="@+id/btnFindPath"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="100dip"
+                android:layout_marginTop="80dip"
                 android:text="Find Path"
                 android:clickable="true" />
 
@@ -129,5 +145,6 @@
         <!-- Login Form Ends -->
 
     </RelativeLayout>
+
 
 </LinearLayout>

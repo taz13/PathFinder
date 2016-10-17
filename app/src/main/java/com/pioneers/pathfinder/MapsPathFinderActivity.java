@@ -1,5 +1,6 @@
 package com.pioneers.pathfinder;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
@@ -27,7 +28,7 @@ public class MapsPathFinderActivity extends FragmentActivity implements OnMapRea
     private GoogleMap mMap;
     private UiSettings settings;
 
-
+    Double sourceLatitude, sourceLongitude,destinationLatitudde,destinationLongitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,11 @@ public class MapsPathFinderActivity extends FragmentActivity implements OnMapRea
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        Intent intent = getIntent();
+        sourceLatitude = intent.getDoubleExtra("SourceLat",0.0);
+        sourceLongitude = intent.getDoubleExtra("SourceLong",0.0);
+
     }
 
 
@@ -80,16 +86,17 @@ public class MapsPathFinderActivity extends FragmentActivity implements OnMapRea
         Location location = locationManager.getLastKnownLocation(provider);
 
         // Getting latitude of the current location
-        double latitude = location.getLatitude();
+       // double latitude = location.getLatitude();
 
         // Getting longitude of the current location
-        double longitude = location.getLongitude();
+       // double longitude = location.getLongitude();
 
         // Creating a LatLng object for the current location
-        LatLng latLng = new LatLng(latitude, longitude);
+      //  LatLng latLng = new LatLng(latitude, longitude);
+        LatLng sydney = new LatLng(sourceLatitude, sourceLongitude);
 
         // Showing the current location in Google Map
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         // Zoom in the Google Map
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
