@@ -34,6 +34,7 @@ import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.pioneers.pathfinder.adapter.PlaceAutocompleteAdapter;
 import com.pioneers.pathfinder.adapter.ViewPagerAdapter;
 import com.pioneers.pathfinder.common.libs.SlidingTabLayout;
@@ -70,6 +71,8 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
     CharSequence sourceName;
 
     private AdView mAdView;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,6 +169,9 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
     }
 
