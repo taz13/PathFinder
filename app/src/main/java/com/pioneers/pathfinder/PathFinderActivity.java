@@ -24,6 +24,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -66,6 +68,8 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
     Double sourceLatitude, sourceLongitude,destinationLatitudde,destinationLongitude;
 
     CharSequence sourceName;
+
+    private AdView mAdView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,34 +162,10 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
             }
         });
 
-
-
-//
-//        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-//        adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,Numboftabs);
-//
-//        // Assigning ViewPager View and setting the adapter
-//        pager = (ViewPager) findViewById(R.id.pager);
-//        pager.setAdapter(adapter);
-//
-//        // Assiging the Sliding Tab Layout View
-//        tabs = (SlidingTabLayout) findViewById(R.id.tabs);
-//        tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
-//
-//
-//        // Setting Custom Color for the Scroll bar indicator of the Tab View
-//        tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-//            @Override
-//            public int getIndicatorColor(int position) {
-//                return getResources().getColor(R.color.tabsScrollColor);
-//            }
-//        });
-//
-//        // Setting the ViewPager For the SlidingTabsLayout
-//        tabs.setViewPager(pager);
-
-        //creating a new async task
-        //new GetBusStopTask().execute(new ApiConnector());
+        //Create ad banner
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
     }
 
