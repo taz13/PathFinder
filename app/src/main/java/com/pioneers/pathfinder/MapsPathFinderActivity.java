@@ -1,7 +1,6 @@
 package com.pioneers.pathfinder;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -14,14 +13,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.pioneers.pathfinder.util.GMapV2Direction;
-
-import org.w3c.dom.Document;
-
-import java.util.ArrayList;
 
 public class MapsPathFinderActivity extends FragmentActivity implements OnMapReadyCallback {
 

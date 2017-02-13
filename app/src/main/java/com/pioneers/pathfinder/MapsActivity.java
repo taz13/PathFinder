@@ -116,20 +116,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public String makeURL (double sourcelat, double sourcelog, double destlat, double destlog ){
-        StringBuilder urlString = new StringBuilder();
-        urlString.append("https://maps.googleapis.com/maps/api/directions/json");
-        urlString.append("?origin=");// from
-        urlString.append(Double.toString(sourcelat));
-        urlString.append(",");
-        urlString
-                .append(Double.toString( sourcelog));
-        urlString.append("&destination=");// to  AIzaSyCW7MbMhbZLceGX63QEqdpF1HZbqOZM3fQ
-        urlString.append(Double.toString(destlat));
-        urlString.append(",");
-        urlString.append(Double.toString(destlog));
-        urlString.append("&sensor=false&mode=driving&alternatives=true");
-        urlString.append("&key=AIzaSyCFOe4injVmrEQdzfqmnipHcAhGk06vtPY");
-        return urlString.toString();
+        String urlString = "https://maps.googleapis.com/maps/api/directions/json" +
+                "?origin=" +// from
+                Double.toString(sourcelat) +
+                "," +
+                Double.toString(sourcelog) +
+                "&destination=" +// to  AIzaSyCW7MbMhbZLceGX63QEqdpF1HZbqOZM3fQ
+                Double.toString(destlat) +
+                "," +
+                Double.toString(destlog) +
+                "&sensor=false&mode=driving&alternatives=true" +
+                "&key=AIzaSyCFOe4injVmrEQdzfqmnipHcAhGk06vtPY";
+        return urlString;
     }
 
     private void getDirection(){
@@ -193,13 +191,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         }
-        catch (JSONException e) {
-
+        catch (JSONException e)
+        {
+            e.printStackTrace();
         }
     }
 
     private List<LatLng> decodePoly(String encoded) {
-        List<LatLng> poly = new ArrayList<LatLng>();
+        List<LatLng> poly = new ArrayList<>();
         int index = 0, len = encoded.length();
         int lat = 0, lng = 0;
 
