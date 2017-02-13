@@ -18,7 +18,6 @@ import org.w3c.dom.NodeList;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import android.content.Context;
 import android.util.Log;
 
 public class GMapV2Direction {
@@ -169,7 +168,7 @@ public class GMapV2Direction {
 
     public ArrayList<LatLng> getDirection(Document doc) {
         NodeList nl1, nl2, nl3;
-        ArrayList<LatLng> listGeopoints = new ArrayList<LatLng>();
+        ArrayList<LatLng> listGeopoints = new ArrayList<>();
         nl1 = doc.getElementsByTagName("step");
         if (nl1.getLength() > 0) {
             for (int i = 0; i < nl1.getLength(); i++) {
@@ -216,7 +215,7 @@ public class GMapV2Direction {
     }
 
     private ArrayList<LatLng> decodePoly(String encoded) {
-        ArrayList<LatLng> poly = new ArrayList<LatLng>();
+        ArrayList<LatLng> poly = new ArrayList<>();
         int index = 0, len = encoded.length();
         int lat = 0, lng = 0;
         while (index < len) {

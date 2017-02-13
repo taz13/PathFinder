@@ -44,15 +44,6 @@ public class ApiConnector
 
 
 
-        } catch (ClientProtocolException e) {
-
-            // Signals error in http protocol
-            e.printStackTrace();
-
-            //Log Errors Here
-
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,9 +60,7 @@ public class ApiConnector
 
                 jsonArray = new JSONArray(entityResponse);
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (JSONException | IOException e) {
                 e.printStackTrace();
             }
         }

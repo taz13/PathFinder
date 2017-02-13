@@ -1,17 +1,12 @@
 package com.pioneers.pathfinder;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.internal.widget.AdapterViewCompat;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.Spanned;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,7 +16,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
@@ -31,13 +25,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.places.AutocompletePrediction;
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.pioneers.pathfinder.adapter.PlaceAutocompleteAdapter;
-import com.pioneers.pathfinder.adapter.ViewPagerAdapter;
-import com.pioneers.pathfinder.common.libs.SlidingTabLayout;
 import com.pioneers.pathfinder.util.ApiConnector;
 
 import org.json.JSONArray;
@@ -47,32 +38,21 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
 {
 
     Toolbar toolbar;
-    ViewPager pager;
-    ViewPagerAdapter adapter;
-    SlidingTabLayout tabs;
-    CharSequence Titles[]={"Shortest Path","Cheapest Path","Find Bus stop","Settings"};
-    int Numboftabs =4;
     private Button findShortestPath;
 
     //For auto complete location
     protected GoogleApiClient mGoogleApiClient;
-
     private PlaceAutocompleteAdapter mAdapter;
-
-    //private AutoCompleteTextView mAutocompleteView;
-
     private AutoCompleteTextView mSourceTextView;
-
     private AutoCompleteTextView mDestTextView;
     private Button btnClearSrc,btnClearDestination;
 
-    Double sourceLatitude, sourceLongitude,destinationLatitudde,destinationLongitude;
+    Double sourceLatitude, sourceLongitude, destinationLatitude,destinationLongitude;
 
-    CharSequence sourceName;
-
+    //For admob
     private AdView mAdView;
-
     private FirebaseAnalytics mFirebaseAnalytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +89,7 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
                                                     Intent showOnMap = new Intent(PathFinderActivity.this, MapsActivity.class);
                                                     showOnMap.putExtra("SourceLat",sourceLatitude);
                                                     showOnMap.putExtra("SourceLong", sourceLongitude);
-                                                    showOnMap.putExtra("DestinationLat",destinationLatitudde);
+                                                    showOnMap.putExtra("DestinationLat", destinationLatitude);
                                                     showOnMap.putExtra("DestinationLong",destinationLongitude);
                                                     startActivity(showOnMap);
                                                 }
@@ -221,8 +201,6 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
             final String placeId = item.getPlaceId();
             final CharSequence primaryText = item.getPrimaryText(null);
 
-            //Log.i(TAG, "Autocomplete item selected: " + primaryText);
-
             /*
              Issue a request to the Places Geo Data API to retrieve a Place object with additional
              details about the place.
@@ -246,10 +224,6 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
                     }
                 }
             });
-
-          /*  Toast.makeText(getApplicationContext(), "Clicked: " + primaryText,
-                    Toast.LENGTH_SHORT).show();*/
-            //Log.i(TAG, "Called getPlaceById to get Place details for " + placeId);
         }
     };
 
@@ -268,8 +242,6 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
             final String placeId = item.getPlaceId();
             final CharSequence primaryText = item.getPrimaryText(null);
 
-            //Log.i(TAG, "Autocomplete item selected: " + primaryText);
-
             /*
              Issue a request to the Places Geo Data API to retrieve a Place object with additional
              details about the place.
@@ -284,7 +256,7 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
                     if(places.getCount()==1){
                         //Do the things here on Click.....
 
-                        destinationLatitudde =  places.get(0).getLatLng().latitude;
+                        destinationLatitude =  places.get(0).getLatLng().latitude;
                         destinationLongitude = places.get(0).getLatLng().longitude;
                         Toast.makeText(getApplicationContext(),"Latitude:"+sourceLatitude+"Longitude:"+sourceLongitude,Toast.LENGTH_SHORT).show();
                     }else {
@@ -293,9 +265,7 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
                 }
             });
 
-          /*  Toast.makeText(getApplicationContext(), "Clicked: " + primaryText,
-                    Toast.LENGTH_SHORT).show();*/
-            //Log.i(TAG, "Called getPlaceById to get Place details for " + placeId);
+
         }
     };
 
@@ -304,48 +274,7 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
      * the details view on screen.
      *
      */
-   /* private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
-            = new ResultCallback<PlaceBuffer>() {
-        @Override
-        public void onResult(PlaceBuffer places) {
-            if (!places.getStatus().isSuccess()) {
-                // Request did not complete successfully
-//                Log.e(TAG, "Place query did not complete. Error: " + places.getStatus().toString());
-                places.release();
-                return;
-            }
-            // Get the Place object from the buffer.
 
-            final Place place = places.get(0);
-
-//            // Format details of the place for display and show it in a TextView.
-//            mPlaceDetailsText.setText(formatPlaceDetails(getResources(), place.getName(),
-//                    place.getId(), place.getAddress(), place.getPhoneNumber(),
-//                    place.getWebsiteUri()));
-
-            // Display the third party attributions if set.
-//            final CharSequence thirdPartyAttribution = places.getAttributions();
-//            if (thirdPartyAttribution == null) {
-//                mPlaceDetailsAttribution.setVisibility(View.GONE);
-//            } else {
-//                mPlaceDetailsAttribution.setVisibility(View.VISIBLE);
-//                mPlaceDetailsAttribution.setText(Html.fromHtml(thirdPartyAttribution.toString()));
-//            }
-
-//            Log.i(TAG, "Place details received: " + place.getName());
-
-            places.release();
-        }
-    };*/
-
-//    private static Spanned formatPlaceDetails(Resources res, CharSequence name, String id,
-//                                              CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
-////        Log.e(TAG, res.getString(R.string.place_details, name, id, address, phoneNumber,
-////                websiteUri));
-//        return Html.fromHtml(res.getString(R.string.place_details, name, id, address, phoneNumber,
-//                websiteUri));
-//
-//    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult)
@@ -354,47 +283,5 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
         Toast.makeText(this,
                 "Could not connect to Google API Client: Error " + connectionResult.getErrorCode(),
                 Toast.LENGTH_SHORT).show();
-    }
-
-//    public void setTextToTextView(JSONArray jsonArray)
-//    {
-//        String s  = "";
-//        for(int i=0; i<jsonArray.length();i++){
-//
-//            JSONObject json = null;
-//            try {
-//                json = jsonArray.getJSONObject(i);
-//                s = s +
-//                        "Name : "+json.getString("FirstName")+" "+json.getString("LastName")+"\n"+
-//                        "Age : "+json.getInt("Age")+"\n"+
-//                        "Mobile Using : "+json.getString("Mobile")+"\n\n";
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//
-//        }
-//
-//       // this.responseTextView.setText(s); //Do all the c
-//    }
-
-    private class GetBusStopTask extends AsyncTask<ApiConnector, Long,JSONArray>
-    {
-
-        @Override
-        protected JSONArray doInBackground(ApiConnector... params)
-        {
-            //It is executed on Background thread
-
-           return params[0].GetAllCustomers();
-        }
-
-        @Override
-        protected void onPostExecute(JSONArray jsonArray)
-        {
-            //It is executed on the main thread
-
-            //setTextToTextView(jsonArray);
-            //Do all the functionalities here
-        }
     }
 }

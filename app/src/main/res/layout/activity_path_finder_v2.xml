@@ -46,8 +46,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
-                android:layout_weight="0.63" />
-            Logo Ends
+                android:layout_weight="0.63"
+                tools:ignore="ContentDescription" />
+            <!--Logo Ends-->
         </LinearLayout>
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
