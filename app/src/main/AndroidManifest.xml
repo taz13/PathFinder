@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--suppress ALL -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.pioneers.pathfinder" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <!--
@@ -44,7 +42,7 @@
              Note that the API key is linked to the encryption key used to sign the APK.
              You need a different API key for each encryption key, including the release key that is used to
              sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -54,7 +52,9 @@
             android:name=".MapsPathFinderActivity"
             android:label="@string/title_activity_maps_path_finder" >
         </activity>
-        <activity android:name=".MapsActivity" />
+        <activity android:name=".MapsActivity"></activity>
+        <activity android:name=".activity.PathList"></activity>
+        <activity android:name=".activity.ExpandableActivity"></activity>
     </application>
 
 </manifest>

@@ -46,9 +46,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
-                android:layout_weight="0.63"
-                tools:ignore="ContentDescription" />
-            <!--Logo Ends-->
+                android:layout_weight="0.63" />
+            Logo Ends
         </LinearLayout>
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -139,7 +138,7 @@
                 android:id="@+id/btnFindPath"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="80dip"
+                android:layout_marginTop="30dip"
                 android:text="Find Path"
                 android:clickable="true" />
 
@@ -147,15 +146,17 @@
         <!-- Login Form Ends -->
 
         <com.google.android.gms.ads.AdView
-            android:id="@+id/adView"
-            android:layout_width="wrap_content"
+            android:id="@+id/ad_view"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
             ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_ad_unit_id">
-        </com.google.android.gms.ads.AdView>
+            ads:adUnitId="@string/banner_ad_unit_id" />
+
     </RelativeLayout>
+
+
 
 
 </LinearLayout>

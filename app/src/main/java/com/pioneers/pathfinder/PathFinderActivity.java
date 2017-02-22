@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.internal.widget.AdapterViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -27,31 +28,39 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
-import com.google.firebase.analytics.FirebaseAnalytics;
+import com.pioneers.pathfinder.activity.PathList;
 import com.pioneers.pathfinder.adapter.PlaceAutocompleteAdapter;
+import com.pioneers.pathfinder.adapter.ViewPagerAdapter;
+import com.pioneers.pathfinder.libs.SlidingTabLayout;
 import com.pioneers.pathfinder.util.ApiConnector;
 
 import org.json.JSONArray;
 
 
-public class PathFinderActivity extends AppCompatActivity implements AdapterViewCompat.OnItemSelectedListener,GoogleApiClient.OnConnectionFailedListener
-{
+public class PathFinderActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     Toolbar toolbar;
+    ViewPager pager;
+    ViewPagerAdapter adapter;
+    SlidingTabLayout tabs;
+    CharSequence Titles[] = {"Shortest Path", "Cheapest Path", "Find Bus stop", "Settings"};
+    int Numboftabs = 4;
     private Button findShortestPath;
 
     //For auto complete location
     protected GoogleApiClient mGoogleApiClient;
+
     private PlaceAutocompleteAdapter mAdapter;
+
+    //private AutoCompleteTextView mAutocompleteView;
+
     private AutoCompleteTextView mSourceTextView;
+
     private AutoCompleteTextView mDestTextView;
-    private Button btnClearSrc,btnClearDestination;
-
-    Double sourceLatitude, sourceLongitude, destinationLatitude,destinationLongitude;
-
-    //For admob
+    private Button btnClearSrc, btnClearDestination;
+    Double sourceLatitude, sourceLongitude, destinationLatitudde, destinationLongitude;
+    CharSequence sourceName;
     private AdView mAdView;
-    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,30 +79,40 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
         //Populating shortest path options
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
-                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                        R.array.path_options, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.path_options, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
-                spinner.setAdapter(adapter);
+        spinner.setAdapter(adapter);
 
         //Adding event listener to the button
-        findShortestPath= (Button)findViewById(R.id.btnFindPath);
+        findShortestPath = (Button) findViewById(R.id.btnFindPath);
 
         //setting onclick listener for find shortest path button
 
         findShortestPath.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    Log.d("PathFinder","Shortest path found");
-                                                    Intent showOnMap = new Intent(PathFinderActivity.this, MapsActivity.class);
-                                                    showOnMap.putExtra("SourceLat",sourceLatitude);
-                                                    showOnMap.putExtra("SourceLong", sourceLongitude);
-                                                    showOnMap.putExtra("DestinationLat", destinationLatitude);
-                                                    showOnMap.putExtra("DestinationLong",destinationLongitude);
-                                                    startActivity(showOnMap);
-                                                }
-                                            });
+            @Override
+            public void onClick(View v) {
+                Log.d("PathFinder", "Shortest path found");
+//                                                    Intent showOnMap = new Intent(PathFinderActivity.this, MapsActivity.class);
+//                                                    showOnMap.putExtra("SourceLat",sourceLatitude);
+//                                                    showOnMap.putExtra("SourceLong", sourceLongitude);
+//                                                    showOnMap.putExtra("DestinationLat",destinationLatitudde);
+//                                                    showOnMap.putExtra("DestinationLong",destinationLongitude);
+//                                                    startActivity(showOnMap);
+
+
+                Intent showOnMap = new Intent(PathFinderActivity.this, PathList.class);
+                showOnMap.putExtra("SourceLat", sourceLatitude);
+                showOnMap.putExtra("SourceLong", sourceLongitude);
+                showOnMap.putExtra("DestinationLat", destinationLatitudde);
+                showOnMap.putExtra("DestinationLong", destinationLongitude);
+                startActivity(showOnMap);
+            }
+
+
+        });
 
         //Auto complete location code
 
@@ -128,7 +147,7 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
         btnClearSrc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mSourceTextView.getText().toString().equals("")){
+                if (!mSourceTextView.getText().toString().equals("")) {
                     mSourceTextView.setText("");
                     Log.d("PathFinder", "Clicked");
                 }
@@ -138,21 +157,61 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
         btnClearDestination.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mDestTextView.getText().toString().equals("")){
+                if (!mDestTextView.getText().toString().equals("")) {
                     mDestTextView.setText("");
                     Log.d("PathFinder", "Clicked");
                 }
             }
         });
 
-        //Create ad banner
-        mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
+
+//
+//        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
+//        adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,Numboftabs);
+//
+//        // Assigning ViewPager View and setting the adapter
+//        pager = (ViewPager) findViewById(R.id.pager);
+//        pager.setAdapter(adapter);
+//
+//        // Assiging the Sliding Tab Layout View
+//        tabs = (SlidingTabLayout) findViewById(R.id.tabs);
+//        tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+//
+//
+//        // Setting Custom Color for the Scroll bar indicator of the Tab View
+//        tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+//            @Override
+//            public int getIndicatorColor(int position) {
+//                return getResources().getColor(R.color.tabsScrollColor);
+//            }
+//        });
+//
+//        // Setting the ViewPager For the SlidingTabsLayout
+//        tabs.setViewPager(pager);
+
+        //creating a new async task
+        //new GetBusStopTask().execute(new ApiConnector());
+
+        initAdMob();
+    }
+
+    private void initAdMob() {
+        // Initialize the Mobile Ads SDK.
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+
+        // Gets the ad view defined in layout/ad_fragment.xml with ad unit ID set in
+        // values/strings.xml.
+        mAdView = (AdView) findViewById(R.id.ad_view);
+
+        // Create an ad request. Check your logcat output for the hashed device ID to
+        // get test ads on a physical device. e.g.
+        // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+
+        // Start loading the ad in the background.
         mAdView.loadAd(adRequest);
-
-        // Obtain the FirebaseAnalytics instance.
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
     }
 
 
@@ -178,15 +237,6 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onItemSelected(AdapterViewCompat<?> parent, View view, int position, long id) {
-
-    }
-
-    @Override
-    public void onNothingSelected(AdapterViewCompat<?> parent) {
-
-    }
 
     private AdapterView.OnItemClickListener mAutocompleteClickListener
             = new AdapterView.OnItemClickListener() {
@@ -201,6 +251,8 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
             final String placeId = item.getPlaceId();
             final CharSequence primaryText = item.getPrimaryText(null);
 
+            //Log.i(TAG, "Autocomplete item selected: " + primaryText);
+
             /*
              Issue a request to the Places Geo Data API to retrieve a Place object with additional
              details about the place.
@@ -212,21 +264,24 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
             placeResult.setResultCallback(new ResultCallback<PlaceBuffer>() {
                 @Override
                 public void onResult(@NonNull PlaceBuffer places) {
-                    if(places.getCount()==1){
+                    if (places.getCount() == 1) {
                         //Do the things here on Click.....
                         sourceLatitude = places.get(0).getLatLng().latitude;
                         sourceLongitude = places.get(0).getLatLng().longitude;
                         CharSequence sourceName = places.get(0).getName();
 
-                        Toast.makeText(getApplicationContext(),"Latitude:"+sourceLatitude+"Longitude:"+sourceLongitude,Toast.LENGTH_SHORT).show();
-                    }else {
-                        Toast.makeText(getApplicationContext(),"SOMETHING_WENT_WRONG",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Latitude:" + sourceLatitude + "Longitude:" + sourceLongitude, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "SOMETHING_WENT_WRONG", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
+
+          /*  Toast.makeText(getApplicationContext(), "Clicked: " + primaryText,
+                    Toast.LENGTH_SHORT).show();*/
+            //Log.i(TAG, "Called getPlaceById to get Place details for " + placeId);
         }
     };
-
 
 
     private AdapterView.OnItemClickListener mListen
@@ -242,6 +297,8 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
             final String placeId = item.getPlaceId();
             final CharSequence primaryText = item.getPrimaryText(null);
 
+            //Log.i(TAG, "Autocomplete item selected: " + primaryText);
+
             /*
              Issue a request to the Places Geo Data API to retrieve a Place object with additional
              details about the place.
@@ -253,35 +310,138 @@ public class PathFinderActivity extends AppCompatActivity implements AdapterView
             placeResult.setResultCallback(new ResultCallback<PlaceBuffer>() {
                 @Override
                 public void onResult(@NonNull PlaceBuffer places) {
-                    if(places.getCount()==1){
+                    if (places.getCount() == 1) {
                         //Do the things here on Click.....
 
-                        destinationLatitude =  places.get(0).getLatLng().latitude;
+                        destinationLatitudde = places.get(0).getLatLng().latitude;
                         destinationLongitude = places.get(0).getLatLng().longitude;
-                        Toast.makeText(getApplicationContext(),"Latitude:"+sourceLatitude+"Longitude:"+sourceLongitude,Toast.LENGTH_SHORT).show();
-                    }else {
-                        Toast.makeText(getApplicationContext(),"SOMETHING_WENT_WRONG",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Latitude:" + sourceLatitude + "Longitude:" + sourceLongitude, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "SOMETHING_WENT_WRONG", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
 
-
+          /*  Toast.makeText(getApplicationContext(), "Clicked: " + primaryText,
+                    Toast.LENGTH_SHORT).show();*/
+            //Log.i(TAG, "Called getPlaceById to get Place details for " + placeId);
         }
     };
 
     /**
      * Callback for results from a Places Geo Data API query that shows the first place result in
      * the details view on screen.
-     *
      */
+   /* private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
+            = new ResultCallback<PlaceBuffer>() {
+        @Override
+        public void onResult(PlaceBuffer places) {
+            if (!places.getStatus().isSuccess()) {
+                // Request did not complete successfully
+//                Log.e(TAG, "Place query did not complete. Error: " + places.getStatus().toString());
+                places.release();
+                return;
+            }
+            // Get the Place object from the buffer.
 
+            final Place place = places.get(0);
 
+//            // Format details of the place for display and show it in a TextView.
+//            mPlaceDetailsText.setText(formatPlaceDetails(getResources(), place.getName(),
+//                    place.getId(), place.getAddress(), place.getPhoneNumber(),
+//                    place.getWebsiteUri()));
+
+            // Display the third party attributions if set.
+//            final CharSequence thirdPartyAttribution = places.getAttributions();
+//            if (thirdPartyAttribution == null) {
+//                mPlaceDetailsAttribution.setVisibility(View.GONE);
+//            } else {
+//                mPlaceDetailsAttribution.setVisibility(View.VISIBLE);
+//                mPlaceDetailsAttribution.setText(Html.fromHtml(thirdPartyAttribution.toString()));
+//            }
+
+//            Log.i(TAG, "Place details received: " + place.getName());
+
+            places.release();
+        }
+    };*/
+
+//    private static Spanned formatPlaceDetails(Resources res, CharSequence name, String id,
+//                                              CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
+////        Log.e(TAG, res.getString(R.string.place_details, name, id, address, phoneNumber,
+////                websiteUri));
+//        return Html.fromHtml(res.getString(R.string.place_details, name, id, address, phoneNumber,
+//                websiteUri));
+//
+//    }
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult)
-    {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         // TODO(Developer): Check error code and notify the user of error state and resolution.
         Toast.makeText(this,
                 "Could not connect to Google API Client: Error " + connectionResult.getErrorCode(),
                 Toast.LENGTH_SHORT).show();
+    }
+
+//    public void setTextToTextView(JSONArray jsonArray)
+//    {
+//        String s  = "";
+//        for(int i=0; i<jsonArray.length();i++){
+//
+//            JSONObject json = null;
+//            try {
+//                json = jsonArray.getJSONObject(i);
+//                s = s +
+//                        "Name : "+json.getString("FirstName")+" "+json.getString("LastName")+"\n"+
+//                        "Age : "+json.getInt("Age")+"\n"+
+//                        "Mobile Using : "+json.getString("Mobile")+"\n\n";
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+//
+//       // this.responseTextView.setText(s); //Do all the c
+//    }
+
+    private class GetBusStopTask extends AsyncTask<ApiConnector, Long, JSONArray> {
+
+        @Override
+        protected JSONArray doInBackground(ApiConnector... params) {
+            //It is executed on Background thread
+
+            return params[0].GetAllCustomers();
+        }
+
+        @Override
+        protected void onPostExecute(JSONArray jsonArray) {
+            //It is executed on the main thread
+
+            //setTextToTextView(jsonArray);
+            //Do all the functionalities here
+        }
+    }
+
+    @Override
+    public void onPause() {
+        if (mAdView != null) {
+            mAdView.pause();
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mAdView != null) {
+            mAdView.resume();
+        }
+    }
+
+    @Override
+    public void onDestroy() { // To destroy adview
+        if (mAdView != null) {
+            mAdView.destroy();
+        }
+        super.onDestroy();
     }
 }

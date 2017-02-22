@@ -4,18 +4,6 @@ package com.pioneers.pathfinder.adapter;
  * Created by tahseenrahman on 2016-08-21.
  */
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.common.data.DataBufferUtils;
-import com.google.android.gms.location.places.AutocompleteFilter;
-import com.google.android.gms.location.places.AutocompletePrediction;
-import com.google.android.gms.location.places.AutocompletePredictionBuffer;
-import com.google.android.gms.location.places.Places;
-import com.google.android.gms.maps.model.LatLngBounds;
-
-//import com.example.android.common.logger.Log;
-
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.style.CharacterStyle;
@@ -28,8 +16,20 @@ import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.data.DataBufferUtils;
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.AutocompletePrediction;
+import com.google.android.gms.location.places.AutocompletePredictionBuffer;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.model.LatLngBounds;
+
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+
+//import com.example.android.common.logger.Log;
 
 /**
  * Adapter that handles Autocomplete requests from the Places Geo Data API.
@@ -68,7 +68,7 @@ public class PlaceAutocompleteAdapter
     /**
      * Initializes with a resource for text rows and autocomplete query bounds.
      *
-     * @see android.widget.ArrayAdapter#ArrayAdapter(android.content.Context, int)
+     * @see ArrayAdapter#ArrayAdapter(Context, int)
      */
     public PlaceAutocompleteAdapter(Context context, GoogleApiClient googleApiClient,
                                     LatLngBounds bounds) {
