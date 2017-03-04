@@ -30,9 +30,8 @@ import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.pioneers.pathfinder.activity.PathList;
 import com.pioneers.pathfinder.adapter.PlaceAutocompleteAdapter;
-import com.pioneers.pathfinder.adapter.ViewPagerAdapter;
 import com.pioneers.pathfinder.libs.SlidingTabLayout;
-import com.pioneers.pathfinder.util.ApiConnector;
+//import com.pioneers.pathfinder.util.ApiConnector;
 
 import org.json.JSONArray;
 
@@ -40,8 +39,6 @@ import org.json.JSONArray;
 public class PathFinderActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     Toolbar toolbar;
-    ViewPager pager;
-    ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
     CharSequence Titles[] = {"Shortest Path", "Cheapest Path", "Find Bus stop", "Settings"};
     int Numboftabs = 4;
@@ -403,23 +400,23 @@ public class PathFinderActivity extends AppCompatActivity implements GoogleApiCl
 //       // this.responseTextView.setText(s); //Do all the c
 //    }
 
-    private class GetBusStopTask extends AsyncTask<ApiConnector, Long, JSONArray> {
-
-        @Override
-        protected JSONArray doInBackground(ApiConnector... params) {
-            //It is executed on Background thread
-
-            return params[0].GetAllCustomers();
-        }
-
-        @Override
-        protected void onPostExecute(JSONArray jsonArray) {
-            //It is executed on the main thread
-
-            //setTextToTextView(jsonArray);
-            //Do all the functionalities here
-        }
-    }
+//    private class GetBusStopTask extends AsyncTask<ApiConnector, Long, JSONArray> {
+//
+//        @Override
+//        protected JSONArray doInBackground(ApiConnector... params) {
+//            //It is executed on Background thread
+//
+//            return params[0].GetAllCustomers();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(JSONArray jsonArray) {
+//            //It is executed on the main thread
+//
+//            //setTextToTextView(jsonArray);
+//            //Do all the functionalities here
+//        }
+//    }
 
     @Override
     public void onPause() {

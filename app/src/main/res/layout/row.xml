@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         card_view:cardCornerRadius="4dp"
         card_view:contentPadding="10dp"
-        app:cardBackgroundColor="#F8F8FF"
+
         android:layout_height="wrap_content">
 
         <!--#D3D3D3-->
