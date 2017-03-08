@@ -1,16 +1,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".PathFinderActivity">
+    tools:context=".activity.PathFinderActivity">
 
     <include
         android:id="@+id/tool_bar"
         layout="@layout/tool_bar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <!--<com.pioneers.pathfinder.common.libs.SlidingTabLayout-->
     <!--android:id="@+id/tabs"-->
@@ -37,66 +37,69 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@layout/header_gradient"
-            android:paddingTop="5dip"
             android:paddingBottom="5dip"
+            android:paddingTop="5dip"
             android:weightSum="1">
             <!--Logo Start-->
             <ImageView
-                android:src="@drawable/bus_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
-                android:layout_weight="0.63" />
+                android:layout_weight="0.63"
+                android:src="@drawable/bus_icon" />
             Logo Ends
         </LinearLayout>
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="vertical"
+            android:id="@+id/locationLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dip"
             android:layout_below="@id/header"
-            android:id="@+id/locationLayout">
+            android:orientation="vertical"
+            android:padding="10dip">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_marginBottom="20dip"
                 android:layout_marginTop="5dip"
-                android:layout_marginBottom="20dip">
+                android:gravity="center">
 
                 <AutoCompleteTextView
+                    android:id="@+id/sourceText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center|left"
                     android:hint="Source"
-                    android:id="@+id/sourceText"
+                    android:completionThreshold="1"
                     android:singleLine="true" />
 
                 <Button
                     android:id="@+id/btnClearSrc"
                     android:layout_width="35dp"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@android:color/transparent"
                     android:drawableRight="@android:drawable/ic_menu_close_clear_cancel"
-                    android:background="@android:color/transparent"/>
+                    android:gravity="right" />
 
             </RelativeLayout>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_marginBottom="20dip"
                 android:layout_marginTop="5dip"
-                android:layout_marginBottom="20dip">
+                android:gravity="center">
 
                 <AutoCompleteTextView
+                    android:id="@+id/destText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center|left"
                     android:hint="Destination"
-                    android:id="@+id/destText"
+                    android:completionThreshold="1"
                     android:singleLine="true" />
 
 
@@ -104,11 +107,11 @@
                     android:id="@+id/btnClearDestination"
                     android:layout_width="35dp"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@android:color/transparent"
                     android:drawableRight="@android:drawable/ic_menu_close_clear_cancel"
-                    android:background="@android:color/transparent"/>
+                    android:gravity="right" />
 
             </RelativeLayout>
 
@@ -117,19 +120,19 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:text="Path Type :"
+                    android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView2"
+                    android:text="Path Type :"
                     android:textAppearance="@android:style/TextAppearance.Holo.Medium" />
 
                 <Spinner
                     android:id="@+id/spinner"
+                    style="@style/Base.Widget.AppCompat.Spinner.Underlined"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-                    android:focusableInTouchMode="true"/>
+                    android:focusableInTouchMode="true" />
 
             </GridLayout>
 
@@ -139,8 +142,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dip"
-                android:text="Find Path"
-                android:clickable="true" />
+                android:clickable="true"
+                android:text="Find Path" />
 
         </LinearLayout>
         <!-- Login Form Ends -->
@@ -149,14 +152,12 @@
             android:id="@+id/ad_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             ads:adSize="BANNER"
             ads:adUnitId="@string/banner_ad_unit_id" />
 
     </RelativeLayout>
-
-
 
 
 </LinearLayout>

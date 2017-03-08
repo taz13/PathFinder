@@ -16,12 +16,16 @@ public class PathFinderApplication extends Application {
     public static final String TAG = "PathFinder";
 
     private static Context context;
+    private static PathFinderApplication mInstance;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
-    private static PathFinderApplication mInstance;
 
     public static Context getAppContext() {
         return PathFinderApplication.context;
+    }
+
+    public static synchronized PathFinderApplication getInstance() {
+        return mInstance;
     }
 
     @Override
@@ -42,10 +46,6 @@ public class PathFinderApplication extends Application {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-    }
-
-    public static synchronized PathFinderApplication getInstance() {
-        return mInstance;
     }
 
     public RequestQueue getRequestQueue() {

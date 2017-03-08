@@ -12,15 +12,19 @@ import com.pioneers.pathfinder.model.DataModel;
 import java.util.List;
 
 
-public class MyRecyclerviewAdapter extends RecyclerView.Adapter<MyRecyclerviewAdapter.DataObjectHolder>{
+public class MyRecyclerviewAdapter extends RecyclerView.Adapter<MyRecyclerviewAdapter.DataObjectHolder> {
 
     private static String LOG_TAG = "MyRecyclerViewAdapter";
-    private List<DataModel> mDataset;
     private static MyClickListener myClickListener;
+    private List<DataModel> mDataset;
+
+    public MyRecyclerviewAdapter(List<DataModel> myDataset) {
+        mDataset = myDataset;
+    }
 
     @Override
     public DataObjectHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-      View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row, parent, false);
         DataObjectHolder dataObjectHolder = new DataObjectHolder(view);
         return dataObjectHolder;
     }
@@ -35,9 +39,9 @@ public class MyRecyclerviewAdapter extends RecyclerView.Adapter<MyRecyclerviewAd
 
     }
 
-    public void deleteItem(int index){
+    public void deleteItem(int index) {
         mDataset.remove(index);
-       notifyItemRemoved(index);
+        notifyItemRemoved(index);
     }
 
     @Override
@@ -45,10 +49,23 @@ public class MyRecyclerviewAdapter extends RecyclerView.Adapter<MyRecyclerviewAd
         return mDataset.size();
     }
 
+    public void setOnItemClickListener(MyClickListener myClickListener) {
+        this.myClickListener = myClickListener;
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+    }
+
+
+    public interface MyClickListener {
+        public void onItemClick(int position, View v);
+    }
 
     public static class DataObjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-      TextView tvtitle,tvroute1,tvroute2;
+        TextView tvtitle, tvroute1, tvroute2;
 
 
         public DataObjectHolder(View itemView) {
@@ -65,21 +82,5 @@ public class MyRecyclerviewAdapter extends RecyclerView.Adapter<MyRecyclerviewAd
             myClickListener.onItemClick(getAdapterPosition(), v);
 
         }
-    }
-    public void setOnItemClickListener(MyClickListener myClickListener){
-        this.myClickListener = myClickListener;
-    }
-    public MyRecyclerviewAdapter(List<DataModel> myDataset){
-        mDataset = myDataset;
-    }
-
-
-    public interface MyClickListener{
-            public void onItemClick(int position, View v);
-        }
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
     }
 }

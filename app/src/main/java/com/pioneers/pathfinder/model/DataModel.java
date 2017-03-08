@@ -1,14 +1,12 @@
 package com.pioneers.pathfinder.model;
 
 
-
 /**
  * Created by Taslima on 3/27/2016.
  */
 public class DataModel {
     String id;
-    String name,route1,route2;
-
+    String name, route1, route2;
 
 
     public String getId() {
@@ -19,12 +17,12 @@ public class DataModel {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getRoute1() {

@@ -19,15 +19,7 @@
           "client_type": 1,
           "android_info": {
             "package_name": "com.pioneers.pathfinder",
-            "certificate_hash": "8A836D3858B6BE4D021EAE764B798A344BF1BD01"
-          }
-        },
-        {
-          "client_id": "973948562269-1o9iddi19gh4b09mpkja33r1jl0odic9.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.pioneers.pathfinder",
-            "certificate_hash": "93CAA64BA05E381D1B0EDA2875A8C9D3763EE72B"
+            "certificate_hash": "8a836d3858b6be4d021eae764b798a344bf1bd01"
           }
         },
         {
@@ -37,6 +29,14 @@
         {
           "client_id": "973948562269-0opia2t13d3p1sqfh08lt25qaf4ecps7.apps.googleusercontent.com",
           "client_type": 3
+        },
+        {
+          "client_id": "973948562269-1o9iddi19gh4b09mpkja33r1jl0odic9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pioneers.pathfinder",
+            "certificate_hash": "93caa64ba05e381d1b0eda2875a8c9d3763ee72b"
+          }
         }
       ],
       "api_key": [

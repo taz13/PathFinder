@@ -1,4 +1,5 @@
 package com.pioneers.pathfinder.adapter;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -9,9 +10,9 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pioneers.pathfinder.MapsActivity;
 import com.pioneers.pathfinder.R;
 import com.pioneers.pathfinder.activity.ExpandableActivity;
+import com.pioneers.pathfinder.activity.MapsActivity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -81,14 +82,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
-        String headerTitle=(String)getGroup(groupPosition);
-        if (convertView==null){
-            LayoutInflater infalInflater=(LayoutInflater)this._context
+        String headerTitle = (String) getGroup(groupPosition);
+        if (convertView == null) {
+            LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView=infalInflater.inflate(R.layout.exp_list_group,null);
+            convertView = infalInflater.inflate(R.layout.exp_list_group, null);
 
         }
-        TextView lblListHeader=(TextView)convertView.findViewById(R.id.lblListHeader);
+        TextView lblListHeader = (TextView) convertView.findViewById(R.id.lblListHeader);
         lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(headerTitle);
         return convertView;
@@ -98,13 +99,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
-        final String childText=(String) getChild(groupPosition,childPosition);
-        if (convertView==null){
-            LayoutInflater infalInflater=(LayoutInflater)this._context
+        final String childText = (String) getChild(groupPosition, childPosition);
+        if (convertView == null) {
+            LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView=infalInflater.inflate(R.layout.exp_list_item,null);
+            convertView = infalInflater.inflate(R.layout.exp_list_item, null);
         }
-        final TextView txtListChild=(TextView)convertView.findViewById(R.id.lblListItem);
+        final TextView txtListChild = (TextView) convertView.findViewById(R.id.lblListItem);
         txtListChild.setText(childText);
         txtListChild.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +116,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 intent.putExtra("DestinationLat", ExpandableActivity.getInstance().destinationLatitude);
                 intent.putExtra("DestinationLong", ExpandableActivity.getInstance().destinationLongitude);
                 _context.startActivity(intent);
-                Toast.makeText(_context,txtListChild.getText().toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(_context, txtListChild.getText().toString(), Toast.LENGTH_LONG).show();
             }
         });
         return convertView;

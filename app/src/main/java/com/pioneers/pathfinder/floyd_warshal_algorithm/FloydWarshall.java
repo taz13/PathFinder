@@ -1,26 +1,25 @@
 /**
- * 
+ *
  */
 package com.pioneers.pathfinder.floyd_warshal_algorithm;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+
 import static java.lang.String.format;
 
 /**
  * @author trahman
- *
  */
 public class FloydWarshall {
 
-	/**
-	 * @param args
-	 */
-	static String csvFile= "busInfo.csv";
-	static double [][] distCost;
-	static double [][]distTime;
-	public static void main(String[] args)
-	{
+    /**
+     * @param args
+     */
+    static String csvFile = "busInfo.csv";
+    static double[][] distCost;
+    static double[][] distTime;
+
+    public static void main(String[] args) {
 //		ArrayList<String> busStopInfo= Utilities.readCsv(csvFile);
 ////		ArrayList<String> busStopInfo=new ArrayList<String>();
 //		
@@ -47,30 +46,30 @@ public class FloydWarshall {
 //
 //        floydWarshall(cost, numVertices,distCost);
 //        floydWarshall(cost, numVertices,distTime);
-		
-		int[][] weights = {{1, 3, -2}, {2, 1, 4}, {2, 3, 3}, {3, 4, 2}, {4, 2, -1}};
-        int numVertices = 4;
- 
-        floydWarshall(weights, numVertices);
-	}
 
-	//calculates all pair shortest path
-	static void floydWarshall(int[][] weights, int numVertices,double[][]dist) {
-		 
-        
+        int[][] weights = {{1, 3, -2}, {2, 1, 4}, {2, 3, 3}, {3, 4, 2}, {4, 2, -1}};
+        int numVertices = 4;
+
+        floydWarshall(weights, numVertices);
+    }
+
+    //calculates all pair shortest path
+    static void floydWarshall(int[][] weights, int numVertices, double[][] dist) {
+
+
         for (double[] row : dist)
             Arrays.fill(row, Double.POSITIVE_INFINITY);
- 
+
         for (int[] w : weights)
             dist[w[0] - 1][w[1] - 1] = w[2];
- 
+
         int[][] next = new int[numVertices][numVertices];
         for (int i = 0; i < next.length; i++) {
             for (int j = 0; j < next.length; j++)
                 if (i != j)
                     next[i][j] = j + 1;
         }
- 
+
         for (int k = 0; k < numVertices; k++)
             for (int i = 0; i < numVertices; i++)
                 for (int j = 0; j < numVertices; j++)
@@ -78,26 +77,26 @@ public class FloydWarshall {
                         dist[i][j] = dist[i][k] + dist[k][j];
                         next[i][j] = next[i][k];
                     }
- 
+
         printResult(dist, next);
     }
- 
-	static void floydWarshall(int[][] weights, int numVertices) {
-		 
+
+    static void floydWarshall(int[][] weights, int numVertices) {
+
         double[][] dist = new double[numVertices][numVertices];
         for (double[] row : dist)
             Arrays.fill(row, Double.POSITIVE_INFINITY);
- 
+
         for (int[] w : weights)
             dist[w[0] - 1][w[1] - 1] = w[2];
- 
+
         int[][] next = new int[numVertices][numVertices];
         for (int i = 0; i < next.length; i++) {
             for (int j = 0; j < next.length; j++)
                 if (i != j)
                     next[i][j] = j + 1;
         }
- 
+
         for (int k = 0; k < numVertices; k++)
             for (int i = 0; i < numVertices; i++)
                 for (int j = 0; j < numVertices; j++)
@@ -105,10 +104,10 @@ public class FloydWarshall {
                         dist[i][j] = dist[i][k] + dist[k][j];
                         next[i][j] = next[i][k];
                     }
- 
+
         printResult(dist, next);
     }
-	
+
     static void printResult(double[][] dist, int[][] next) {
         System.out.println("pair     dist    path");
         for (int i = 0; i < next.length; i++) {
@@ -127,6 +126,7 @@ public class FloydWarshall {
             }
         }
     }
+
     //saving tree to database
     static void savePaths(double[][] dist, int[][] next) {
         System.out.println("pair     dist    path");
@@ -147,5 +147,5 @@ public class FloydWarshall {
         }
     }
 
-	
+
 }

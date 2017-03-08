@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent"  android:layout_width="fill_parent">
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
     <gradient
-        android:startColor="@color/ColorPrimary"
+        android:angle="270"
         android:centerColor="@color/ColorPrimaryDark"
         android:endColor="@color/ColorPrimary"
-        android:angle="270"/>
+        android:startColor="@color/ColorPrimary" />
     <!--<corners android:radius="5dp" />-->
 </shape>

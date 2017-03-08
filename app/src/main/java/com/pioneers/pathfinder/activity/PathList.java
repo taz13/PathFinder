@@ -16,10 +16,10 @@ import java.util.ArrayList;
 
 public class PathList extends AppCompatActivity {
 
-    Double sourceLatitude, sourceLongitude,destinationLatitude,destinationLongitude;
-    String[] name = {"Path 1(5 Stops)","Path 2(7 Stops)","Path 3(10 Stops)","Path 4(12 Stops)","Path 5(14 Stops)"};
-    String[] route_one = {"1.Mohammadpur to Agargaon","1.Mohammadpur to Mohakhali","1.Mohammadpur to BRTC Area","1.Mohammadpur to Sankar","1.Mohammadpur to Star Kabab Dhanmondi"};
-    String[] route_two = {"2.Agargaon to Mirpur 1","2.Mohakhali to Mirpur 1","2.BRTC Area to Mirpur 1","2.Sankar to Mirpur 1","2.Star Kabab Dhanmondi to Mirpur 1"};
+    Double sourceLatitude, sourceLongitude, destinationLatitude, destinationLongitude;
+    String[] name = {"Path 1(5 Stops)", "Path 2(7 Stops)", "Path 3(10 Stops)", "Path 4(12 Stops)", "Path 5(14 Stops)"};
+    String[] route_one = {"1.Mohammadpur to Agargaon", "1.Mohammadpur to Mohakhali", "1.Mohammadpur to BRTC Area", "1.Mohammadpur to Sankar", "1.Mohammadpur to Star Kabab Dhanmondi"};
+    String[] route_two = {"2.Agargaon to Mirpur 1", "2.Mohakhali to Mirpur 1", "2.BRTC Area to Mirpur 1", "2.Sankar to Mirpur 1", "2.Star Kabab Dhanmondi to Mirpur 1"};
     ArrayList<DataModel> sourceArrayList = new ArrayList<DataModel>();
 
     private RecyclerView mRecyclerView;
@@ -38,7 +38,7 @@ public class PathList extends AppCompatActivity {
         destinationLongitude = intent.getDoubleExtra("DestinationLong", 0.0);
 
 
-        for (int i = 0;i<name.length;i++){
+        for (int i = 0; i < name.length; i++) {
             DataModel item = new DataModel();
             item.setName(name[i]);
             item.setRoute1(route_one[i]);
@@ -49,7 +49,7 @@ public class PathList extends AppCompatActivity {
         }
 
         //Connecting Xml to Java
-        mRecyclerView = (RecyclerView)findViewById(R.id.my_recycler_view);
+        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(PathList.this);
@@ -58,15 +58,15 @@ public class PathList extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
 
-        ((MyRecyclerviewAdapter)mAdapter).setOnItemClickListener(new MyRecyclerviewAdapter.MyClickListener(){
+        ((MyRecyclerviewAdapter) mAdapter).setOnItemClickListener(new MyRecyclerviewAdapter.MyClickListener() {
 
             @Override
             public void onItemClick(int position, View view) {
-                Intent intent = new Intent(PathList.this,ExpandableActivity.class);
-                intent.putExtra("SourceLat",sourceLatitude);
+                Intent intent = new Intent(PathList.this, ExpandableActivity.class);
+                intent.putExtra("SourceLat", sourceLatitude);
                 intent.putExtra("SourceLong", sourceLongitude);
-                intent.putExtra("DestinationLat",destinationLatitude);
-                intent.putExtra("DestinationLong",destinationLongitude);
+                intent.putExtra("DestinationLat", destinationLatitude);
+                intent.putExtra("DestinationLong", destinationLongitude);
                 startActivity(intent);
 
             }

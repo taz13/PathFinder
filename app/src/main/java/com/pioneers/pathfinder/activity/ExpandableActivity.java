@@ -18,13 +18,17 @@ import java.util.List;
  */
 public class ExpandableActivity extends Activity { // For Test Commit
 
-    Context context;
     public static ExpandableActivity instance = null;
-    public Double sourceLatitude, sourceLongitude,destinationLatitude,destinationLongitude;
+    public Double sourceLatitude, sourceLongitude, destinationLatitude, destinationLongitude;
+    Context context;
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
+
+    public static ExpandableActivity getInstance() {
+        return instance;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +36,7 @@ public class ExpandableActivity extends Activity { // For Test Commit
         setContentView(R.layout.expandable_activity);
         context = this;
         instance = this;
-        expListView=(ExpandableListView)findViewById(R.id.lvExp);
+        expListView = (ExpandableListView) findViewById(R.id.lvExp);
 
         Intent intent = getIntent();
         sourceLatitude = intent.getDoubleExtra("SourceLat", 0.0);
@@ -45,13 +49,9 @@ public class ExpandableActivity extends Activity { // For Test Commit
         expListView.setAdapter(listAdapter);
 
 
-
     }
 
-    public static ExpandableActivity getInstance() {
-        return instance;
-    }
-    private void prepareListData(){
+    private void prepareListData() {
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
 
@@ -68,22 +68,22 @@ public class ExpandableActivity extends Activity { // For Test Commit
                 "\n" +
                 "2. Shyamoli\n" +
                 "\n" +
-                "3. Shishu Mela\n"+"\n"+
-                 "4. Agargaon\n"+"\n"+
-                 "5. Mohakhali\n"+"\n"+
-                  "6. Gulsan 1\n"+"\n"+
-                   "7. Badda Link Road\n"+"\n"+
-                    "8. Badda");
+                "3. Shishu Mela\n" + "\n" +
+                "4. Agargaon\n" + "\n" +
+                "5. Mohakhali\n" + "\n" +
+                "6. Gulsan 1\n" + "\n" +
+                "7. Badda Link Road\n" + "\n" +
+                "8. Badda");
 
         List<String> BRTC10 = new ArrayList<String>();
         BRTC10.add("1. Mohammadpur\n" +
                 "\n" +
                 "2. Shyamoli\n" +
                 "\n" +
-                "3. Shishu Mela\n"+"\n"+
-                "4. Agargaon\n"+"\n"+
-                "5. Mohakhali\n"+"\n"+
-                "6. Gulsan 1\n"+"\n"+
+                "3. Shishu Mela\n" + "\n" +
+                "4. Agargaon\n" + "\n" +
+                "5. Mohakhali\n" + "\n" +
+                "6. Gulsan 1\n" + "\n" +
                 "7. Gulsan 2\n");
 
 
@@ -92,11 +92,11 @@ public class ExpandableActivity extends Activity { // For Test Commit
                 "\n" +
                 "2. Mirpur 1\n" +
                 "\n" +
-                "3. Mirpur 10\n"+"\n"+
-                "4. Agargaon\n"+"\n"+
-                "5. Mohakhali\n"+"\n"+
-                "6. Kakoli\n"+"\n"+
-                "7. Uttara\n"+"\n"+
+                "3. Mirpur 10\n" + "\n" +
+                "4. Agargaon\n" + "\n" +
+                "5. Mohakhali\n" + "\n" +
+                "6. Kakoli\n" + "\n" +
+                "7. Uttara\n" + "\n" +
                 "8. Abdullahpur");
 
         List<String> two = new ArrayList<String>();
@@ -104,18 +104,16 @@ public class ExpandableActivity extends Activity { // For Test Commit
                 "\n" +
                 "2. Razarbag Police Line\n" +
                 "\n" +
-                "3. Maghbazar\n"+"\n"+
-                "4. Bangla Motor\n"+"\n"+
-                "5. Farmgate\n"+"\n"+
-                "6. Agargaon\n"+"\n"+
-                "7. Shewrapara\n"+"\n"+
-                "8. Kazipara\n"+"\n"+
-                 "9. Mirpur 10\n"+"\n"+
-                  "10. Mirpur 2\n"+"\n"+
-                  "11. Mirpur 1\n"+"\n"+
-                   "12. Zoo");
-
-
+                "3. Maghbazar\n" + "\n" +
+                "4. Bangla Motor\n" + "\n" +
+                "5. Farmgate\n" + "\n" +
+                "6. Agargaon\n" + "\n" +
+                "7. Shewrapara\n" + "\n" +
+                "8. Kazipara\n" + "\n" +
+                "9. Mirpur 10\n" + "\n" +
+                "10. Mirpur 2\n" + "\n" +
+                "11. Mirpur 1\n" + "\n" +
+                "12. Zoo");
 
 
         listDataChild.put(listDataHeader.get(0), BRTC9);

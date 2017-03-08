@@ -1,10 +1,13 @@
-package com.pioneers.pathfinder;
+package com.pioneers.pathfinder.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -13,13 +16,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.pioneers.pathfinder.R;
 
 public class MapsPathFinderActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    Double sourceLatitude, sourceLongitude, destinationLatitudde, destinationLongitude;
     private GoogleMap mMap;
     private UiSettings settings;
-
-    Double sourceLatitude, sourceLongitude,destinationLatitudde,destinationLongitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +34,8 @@ public class MapsPathFinderActivity extends FragmentActivity implements OnMapRea
         mapFragment.getMapAsync(this);
 
         Intent intent = getIntent();
-        sourceLatitude = intent.getDoubleExtra("SourceLat",0.0);
-        sourceLongitude = intent.getDoubleExtra("SourceLong",0.0);
+        sourceLatitude = intent.getDoubleExtra("SourceLat", 0.0);
+        sourceLongitude = intent.getDoubleExtra("SourceLong", 0.0);
 
     }
 
@@ -49,7 +52,7 @@ public class MapsPathFinderActivity extends FragmentActivity implements OnMapRea
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        settings=mMap.getUiSettings();
+        settings = mMap.getUiSettings();
 
         //Showing map controls
         settings.setCompassEnabled(true);
@@ -62,6 +65,16 @@ public class MapsPathFinderActivity extends FragmentActivity implements OnMapRea
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         // Enabling MyLocation Layer of Google Map
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         googleMap.setMyLocationEnabled(true);
 
         // Creating a criteria object to retrieve provider
@@ -77,13 +90,13 @@ public class MapsPathFinderActivity extends FragmentActivity implements OnMapRea
         Location location = locationManager.getLastKnownLocation(provider);
 
         // Getting latitude of the current location
-       // double latitude = location.getLatitude();
+        // double latitude = location.getLatitude();
 
         // Getting longitude of the current location
-       // double longitude = location.getLongitude();
+        // double longitude = location.getLongitude();
 
         // Creating a LatLng object for the current location
-      //  LatLng latLng = new LatLng(latitude, longitude);
+        //  LatLng latLng = new LatLng(latitude, longitude);
         LatLng sydney = new LatLng(sourceLatitude, sourceLongitude);
 
         // Showing the current location in Google Map

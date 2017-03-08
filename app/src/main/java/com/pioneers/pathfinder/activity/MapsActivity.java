@@ -1,12 +1,15 @@
-package com.pioneers.pathfinder;
+package com.pioneers.pathfinder.activity;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +38,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.SphericalUtil;
+import com.pioneers.pathfinder.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,12 +51,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerDragListener, GoogleMap.OnMapLongClickListener,
         View.OnClickListener {
 
-    private GoogleMap mMap;
     String final_Lat, final_longitude, final_name, latFList, logFList;
+    Double sourceLatitude, sourceLongitude, destinationLatitude, destinationLongitude;
+    private GoogleMap mMap;
     //Double toLatitude, toLongitude,fromLatutude,fromLongitude;
     private GoogleApiClient googleApiClient;
     private Button buttonCalculate;
-    Double sourceLatitude, sourceLongitude, destinationLatitude, destinationLongitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -241,6 +245,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         mMap = googleMap;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         mMap.setMyLocationEnabled(true);
 
         CameraPosition googlePlex = CameraPosition.builder()
