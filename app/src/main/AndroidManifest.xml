@@ -32,12 +32,14 @@
 
         <activity
             android:name=".activity.PathFinderActivity"
-            android:label="@string/title_activity_path_finder">
+            android:label="@string/title_activity_path_finder"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -55,7 +57,7 @@
             android:name=".activity.MapsPathFinderActivity"
             android:label="@string/title_activity_maps_path_finder"></activity>
         <activity android:name=".activity.MapsActivity"></activity>
-        <activity android:name=".activity.PathList"></activity>
+        <activity android:name=".activity.PathListActivity"></activity>
         <activity android:name=".activity.ExpandableActivity"></activity>
     </application>
 

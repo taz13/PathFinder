@@ -21,18 +21,12 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.location.places.AutocompletePrediction;
-import com.google.android.gms.location.places.PlaceBuffer;
-import com.google.android.gms.location.places.Places;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.pioneers.pathfinder.R;
-import com.pioneers.pathfinder.adapter.PlaceAutocompleteAdapter;
 //import com.pioneers.pathfinder.util.ApiConnector;
 
 
@@ -47,7 +41,6 @@ public class PathFinderActivity extends AppCompatActivity implements GoogleApiCl
 
     //private AutoCompleteTextView mAutocompleteView;
     private Button findShortestPath;
-    private PlaceAutocompleteAdapter mAdapter;
     private AutoCompleteTextView mSourceTextView;
     private AutoCompleteTextView mDestTextView;
     private Button btnClearSrc, btnClearDestination;
@@ -116,11 +109,9 @@ public class PathFinderActivity extends AppCompatActivity implements GoogleApiCl
             public void onClick(View v) {
                 Log.d("PathFinder", "Shortest path found");
 
-                Intent showOnMap = new Intent(PathFinderActivity.this, PathList.class);
-                showOnMap.putExtra("SourceLat", sourceLatitude);
-                showOnMap.putExtra("SourceLong", sourceLongitude);
-                showOnMap.putExtra("DestinationLat", destinationLatitudde);
-                showOnMap.putExtra("DestinationLong", destinationLongitude);
+                Intent showOnMap = new Intent(PathFinderActivity.this, PathListActivity.class);
+                showOnMap.putExtra("Source", mSourceTextView.getText().toString());
+                showOnMap.putExtra("Destination", mDestTextView.getText().toString());
                 startActivity(showOnMap);
             }
 
@@ -134,8 +125,7 @@ public class PathFinderActivity extends AppCompatActivity implements GoogleApiCl
         // Retrieve the AutoCompleteTextView that will display Source place suggestions.
         mSourceTextView = (AutoCompleteTextView) findViewById(R.id.sourceText);
 
-//        // Register a listener that receives callbacks when a suggestion has been selected
-//        mSourceTextView.setOnItemClickListener(mAutocompleteClickListener);
+
 
         // Retrieve the AutoCompleteTextView that will display Destination place suggestions.
         mDestTextView = (AutoCompleteTextView) findViewById(R.id.destText);
@@ -170,7 +160,7 @@ public class PathFinderActivity extends AppCompatActivity implements GoogleApiCl
 
     private void initAdMob() {
         // Initialize the Mobile Ads SDK.
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+        MobileAds.initialize(this, getString(R.string.banner_ad_unit_id));
 
         // Gets the ad view defined in layout/ad_fragment.xml with ad unit ID set in
         // values/strings.xml.

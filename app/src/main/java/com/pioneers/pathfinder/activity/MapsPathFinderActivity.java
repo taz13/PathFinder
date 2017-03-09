@@ -89,14 +89,7 @@ public class MapsPathFinderActivity extends FragmentActivity implements OnMapRea
         // Getting Current Location
         Location location = locationManager.getLastKnownLocation(provider);
 
-        // Getting latitude of the current location
-        // double latitude = location.getLatitude();
 
-        // Getting longitude of the current location
-        // double longitude = location.getLongitude();
-
-        // Creating a LatLng object for the current location
-        //  LatLng latLng = new LatLng(latitude, longitude);
         LatLng sydney = new LatLng(sourceLatitude, sourceLongitude);
 
         // Showing the current location in Google Map
