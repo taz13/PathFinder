@@ -33,9 +33,9 @@ public class MyRecyclerviewAdapter extends RecyclerView.Adapter<MyRecyclerviewAd
     public void onBindViewHolder(DataObjectHolder holder, int position) {
 
         DataModel m = mDataset.get(position);
-        holder.tvtitle.setText(m.getName());
-        holder.tvroute1.setText(m.getRoute1());
-        holder.tvroute2.setText(m.getRoute2());
+        holder.pathTitle.setText(m.getName());
+        holder.route.setText(m.getRoute().replaceAll(":"," => "));
+        holder.stops.setText(m.getStopCount());
 
     }
 
@@ -65,14 +65,14 @@ public class MyRecyclerviewAdapter extends RecyclerView.Adapter<MyRecyclerviewAd
 
     public static class DataObjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView tvtitle, tvroute1, tvroute2;
+        TextView pathTitle, stops, route;
 
 
         public DataObjectHolder(View itemView) {
             super(itemView);
-            tvtitle = (TextView) itemView.findViewById(R.id.grid_name);
-            tvroute1 = (TextView) itemView.findViewById(R.id.txtRoute1);
-            tvroute2 = (TextView) itemView.findViewById(R.id.txtRoute2);
+            pathTitle = (TextView) itemView.findViewById(R.id.txtTitle);
+            stops = (TextView) itemView.findViewById(R.id.txtStops);
+            route = (TextView) itemView.findViewById(R.id.txtRoute);
 
             itemView.setOnClickListener(this);
         }

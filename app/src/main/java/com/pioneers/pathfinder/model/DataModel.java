@@ -6,7 +6,7 @@ package com.pioneers.pathfinder.model;
  */
 public class DataModel {
     String id;
-    String name, route1, route2;
+    String name, route, stopCount;
 
 
     public String getId() {
@@ -25,20 +25,20 @@ public class DataModel {
         this.name = name;
     }
 
-    public String getRoute1() {
-        return route1;
+    public String getRoute() {
+        return route;
     }
 
-    public void setRoute1(String route1) {
-        this.route1 = route1;
+    public void setRoute(String route) {
+        this.route = route;
     }
 
-    public String getRoute2() {
-        return route2;
+    public String getStopCount() {
+        return stopCount;
     }
 
-    public void setRoute2(String route2) {
-        this.route2 = route2;
+    public void setStopCount(String stopCount) {
+        this.stopCount = stopCount;
     }
 }
 
