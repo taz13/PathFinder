@@ -109,7 +109,7 @@ public class PathFinderActivity extends AppCompatActivity implements GoogleApiCl
             public void onClick(View v) {
                 Log.d("PathFinder", "Shortest path found");
 
-                Intent showOnMap = new Intent(PathFinderActivity.this, PathListActivity.class);
+                Intent showOnMap = new Intent(PathFinderActivity.this, ExpandableActivity.class);
                 showOnMap.putExtra("Source", mSourceTextView.getText().toString());
                 showOnMap.putExtra("Destination", mDestTextView.getText().toString());
                 startActivity(showOnMap);

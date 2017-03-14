@@ -122,12 +122,12 @@ public class PathListActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(int position, View view) {
-//                Intent intent = new Intent(PathListActivity.this, ExpandableActivity.class);
+                Intent intent = new Intent(PathListActivity.this, ExpandableActivity.class);
 //                intent.putExtra("SourceLat", sourceLatitude);
 //                intent.putExtra("SourceLong", sourceLongitude);
 //                intent.putExtra("DestinationLat", destinationLatitude);
 //                intent.putExtra("DestinationLong", destinationLongitude);
-//                startActivity(intent);
+                startActivity(intent);
 
             }
         });
