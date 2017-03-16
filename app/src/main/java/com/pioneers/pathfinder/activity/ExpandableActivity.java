@@ -72,6 +72,10 @@ public class ExpandableActivity extends Activity { // For Test Commit
                 shortestPathMap = (Map<String, String>) dataSnapshot.getValue();
                 prepareListData();
                 listAdapter = new ExpandableListAdapter(getBaseContext(), listPathHeader, listPathDetails);
+                listAdapter.setSource(source);
+                listAdapter.setDestination(destination);
+                listAdapter.setKeyList(costList);
+                listAdapter.setPathMap(shortestPathMap);
                 expListView.setAdapter(listAdapter);
             }
 
@@ -89,7 +93,7 @@ public class ExpandableActivity extends Activity { // For Test Commit
         listPathHeader = new ArrayList<>();
         //Add header
         costList = new ArrayList<>(shortestPathMap.keySet());
-
+        ArrayList temp = new ArrayList();
         for (int i = 0; i < shortestPathMap.size(); i++) {
             listPathHeader.add("Route " + (i + 1));
             busStops = shortestPathMap.get(costList.get(i)).split(":");
@@ -100,68 +104,10 @@ public class ExpandableActivity extends Activity { // For Test Commit
             for (int j = 0; j < busStops.length; j++) {
                 buildRoute.append("\t" + (j + 1) + ". " + busStops[j] + "\n");
             }
-            ArrayList temp = new ArrayList();
+
             temp.add(buildRoute.toString());
             listPathDetails.put(listPathHeader.get(i), temp);
         }
-//        // Adding child data
-//        List<String> BRTC9 = new ArrayList<String>();
-//        BRTC9.add("1. Mohammadpur\n" +
-//                "\n" +
-//                "2. Shyamoli\n" +
-//                "\n" +
-//                "3. Shishu Mela\n" + "\n" +
-//                "4. Agargaon\n" + "\n" +
-//                "5. Mohakhali\n" + "\n" +
-//                "6. Gulsan 1\n" + "\n" +
-//                "7. Badda Link Road\n" + "\n" +
-//                "8. Badda");
-//
-//        List<String> BRTC10 = new ArrayList<String>();
-//        BRTC9.add("1. Mohammadpur\n" +
-//                "\n" +
-//                "2. Shyamoli\n" +
-//                "\n" +
-//                "3. Shishu Mela\n" + "\n" +
-//                "4. Agargaon\n" + "\n" +
-//                "5. Mohakhali\n" + "\n" +
-//                "6. Gulsan 1\n" + "\n" +
-//                "7. Gulsan 2\n");
-//
-//
-//        List<String> sevend = new ArrayList<String>();
-//        sevend.add("1. Gabtoli\n" +
-//                "\n" +
-//                "2. Mirpur 1\n" +
-//                "\n" +
-//                "3. Mirpur 10\n" + "\n" +
-//                "4. Agargaon\n" + "\n" +
-//                "5. Mohakhali\n" + "\n" +
-//                "6. Kakoli\n" + "\n" +
-//                "7. Uttara\n" + "\n" +
-//                "8. Abdullahpur");
-//
-//        List<String> two = new ArrayList<String>();
-//        two.add("1. Kamalapur\n" +
-//                "\n" +
-//                "2. Razarbag Police Line\n" +
-//                "\n" +
-//                "3. Maghbazar\n" + "\n" +
-//                "4. Bangla Motor\n" + "\n" +
-//                "5. Farmgate\n" + "\n" +
-//                "6. Agargaon\n" + "\n" +
-//                "7. Shewrapara\n" + "\n" +
-//                "8. Kazipara\n" + "\n" +
-//                "9. Mirpur 10\n" + "\n" +
-//                "10. Mirpur 2\n" + "\n" +
-//                "11. Mirpur 1\n" + "\n" +
-//                "12. Zoo");
-//
-//
-//        listPathDetails.put(listPathHeader.get(0), BRTC9);
-//        listPathDetails.put(listPathHeader.get(1), BRTC10);
-//        listPathDetails.put(listPathHeader.get(2), sevend);
-//        listPathDetails.put(listPathHeader.get(3), two);// Header, Child data
 
 
     }

@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <uses-library android:name="com.google.android.maps" />
+
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="23" />
@@ -23,6 +23,7 @@
         android:icon="@drawable/bus_icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+        <uses-library android:name="com.google.android.maps" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -53,11 +54,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".activity.MapsPathFinderActivity"
-            android:label="@string/title_activity_maps_path_finder"></activity>
         <activity android:name=".activity.MapsActivity"></activity>
-        <activity android:name=".activity.PathListActivity"></activity>
         <activity android:name=".activity.ExpandableActivity"></activity>
     </application>
 

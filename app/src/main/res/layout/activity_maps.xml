@@ -7,20 +7,6 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
-
         />
-
-
-    <!-- <Button
-         android:id="@+id/buttonCalcDistance"
-         android:text="Show Direction"
-         android:layout_width="150dp"
-         android:textColor="#07408d"
-         android:layout_height="wrap_content"
-         android:layout_marginBottom="20dp"
-
-         android:layout_gravity="center_horizontal|bottom" />-->
-
 
 </FrameLayout>

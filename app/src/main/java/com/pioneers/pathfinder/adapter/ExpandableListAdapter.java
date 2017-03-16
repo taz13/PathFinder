@@ -11,11 +11,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pioneers.pathfinder.R;
-import com.pioneers.pathfinder.activity.ExpandableActivity;
 import com.pioneers.pathfinder.activity.MapsActivity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Taslima on 10/17/2015.
@@ -24,6 +25,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private Context _context;
     private List<String> _listDataHeader;
     private HashMap<String, List<String>> _listDataChild;
+    private Map<String, String> pathMap;
+    private ArrayList<String> keyList;
+    private String source;
+    private String destination;
 
     public ExpandableListAdapter(Context context, List<String> listDataHeader,
                                  HashMap<String, List<String>> listChildData) {
@@ -40,7 +45,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition)).size();
+        return 1;
     }
 
 
@@ -97,7 +102,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
 
     @Override
-    public View getChildView(int groupPosition, int childPosition,
+    public View getChildView(final int groupPosition, int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
         final String childText = (String) getChild(groupPosition, childPosition);
         if (convertView == null) {
@@ -111,10 +116,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(_context, MapsActivity.class);
-                intent.putExtra("SourceLat", ExpandableActivity.getInstance().sourceLatitude);
-                intent.putExtra("SourceLong", ExpandableActivity.getInstance().sourceLongitude);
-                intent.putExtra("DestinationLat", ExpandableActivity.getInstance().destinationLatitude);
-                intent.putExtra("DestinationLong", ExpandableActivity.getInstance().destinationLongitude);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("Source", source);
+                intent.putExtra("Destination", destination);
+                intent.putExtra("Path", pathMap.get(keyList.get(groupPosition)));
                 _context.startActivity(intent);
                 Toast.makeText(_context, txtListChild.getText().toString(), Toast.LENGTH_LONG).show();
             }
@@ -126,5 +131,21 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public void setPathMap(Map<String, String> pathMap) {
+        this.pathMap = pathMap;
+    }
+
+    public void setKeyList(ArrayList<String> keyList) {
+        this.keyList = keyList;
     }
 }
