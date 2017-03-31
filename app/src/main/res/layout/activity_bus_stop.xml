@@ -40,7 +40,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/header"
-            android:orientation="vertical"
             android:padding="10dip">
 
             <RelativeLayout
@@ -51,83 +50,37 @@
                 android:gravity="center">
 
                 <AutoCompleteTextView
-                    android:id="@+id/sourceText"
+                    android:id="@+id/stopTxt"
+                    style="@android:style/Widget.DeviceDefault.AutoCompleteTextView"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center|left"
-                    android:hint="Source"
-                    android:completionThreshold="1" />
-
-                <Button
-                    android:id="@+id/btnClearSrc"
-                    android:layout_width="35dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:background="@android:color/transparent"
-                    android:drawableRight="@android:drawable/ic_menu_close_clear_cancel"
-                    android:gravity="right" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dip"
-                android:layout_marginTop="5dip"
-                android:gravity="center">
-
-                <AutoCompleteTextView
-                    android:id="@+id/destText"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center|left"
-                    android:hint="Destination"
                     android:completionThreshold="1"
-                    android:singleLine="true" />
-
+                    android:elevation="9dp"
+                    android:ellipsize="middle"
+                    android:gravity="center|left"
+                    android:hint="Bus Stop"
+                    android:layout_toStartOf="@+id/btnClearStop" />
 
                 <Button
-                    android:id="@+id/btnClearDestination"
+                    android:id="@+id/btnClearStop"
                     android:layout_width="35dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
                     android:background="@android:color/transparent"
                     android:drawableRight="@android:drawable/ic_menu_close_clear_cancel"
-                    android:gravity="right" />
+                    android:gravity="top|right"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true" />
 
+                <Button
+                    android:id="@+id/btnFindBus"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/stopTxt"
+                    android:layout_marginTop="30dip"
+                    android:clickable="true"
+                    android:text="Find Bus Service" />
             </RelativeLayout>
 
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Path Type :"
-                    android:textAppearance="@android:style/TextAppearance.Holo.Medium" />
-
-                <Spinner
-                    android:id="@+id/spinner"
-                    style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:focusableInTouchMode="true" />
-
-            </GridLayout>
-
-
-            <Button
-                android:id="@+id/btnFindPath"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dip"
-                android:clickable="true"
-                android:text="Find Path" />
 
         </LinearLayout>
         <!-- Login Form Ends -->

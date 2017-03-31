@@ -1,53 +1,44 @@
 package com.pioneers.pathfinder.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.Environment;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.pioneers.pathfinder.R;
-//import com.pioneers.pathfinder.util.ApiConnector;
 
-
-public class PathFinderActivity extends AppCompatActivity {
+public class BusStopActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     String TAG="Database setup";
 
-
-    private Button findShortestPath;
+    private Button findBusServices;
     private AutoCompleteTextView mSourceTextView;
-    private AutoCompleteTextView mDestTextView;
-    private Button btnClearSrc, btnClearDestination;
+    private Button btnClearSrc;
     private AdView mAdView;
     private String busStops[];
     private DatabaseReference busStopRef;
     private ArrayAdapter<String> adapterBusStop;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_path_finder_v2);
+        setContentView(R.layout.activity_bus_stop);
+
         adapterBusStop = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line);
         try {
 
@@ -90,30 +81,19 @@ public class PathFinderActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        //Populating shortest path options
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.path_options, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
-
         //Adding event listener to the button
-        findShortestPath = (Button) findViewById(R.id.btnFindPath);
+        findBusServices = (Button) findViewById(R.id.btnFindBus);
 
         //setting onclick listener for find shortest path button
 
-        findShortestPath.setOnClickListener(new View.OnClickListener() {
+        findBusServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("PathFinder", "Shortest path found");
+                Log.d("BusFinder", "Bus services found");
 
-                Intent showOnMap = new Intent(PathFinderActivity.this, ExpandableActivity.class);
-                showOnMap.putExtra("reqType",R.string.shortestPath);
-                showOnMap.putExtra("Source", mSourceTextView.getText().toString());
-                showOnMap.putExtra("Destination", mDestTextView.getText().toString());
+                Intent showOnMap = new Intent(BusStopActivity.this, ExpandableActivity.class);
+                showOnMap.putExtra("reqType",R.string.busService);
+                showOnMap.putExtra("stopName", mSourceTextView.getText().toString());
                 startActivity(showOnMap);
             }
 
@@ -125,17 +105,11 @@ public class PathFinderActivity extends AppCompatActivity {
 
 
         // Retrieve the AutoCompleteTextView that will display Source place suggestions.
-        mSourceTextView = (AutoCompleteTextView) findViewById(R.id.sourceText);
-
-
-
-        // Retrieve the AutoCompleteTextView that will display Destination place suggestions.
-        mDestTextView = (AutoCompleteTextView) findViewById(R.id.destText);
+        mSourceTextView = (AutoCompleteTextView) findViewById(R.id.stopTxt);
 
         mSourceTextView.setAdapter(adapterBusStop);
-        mDestTextView.setAdapter(adapterBusStop);
 
-        btnClearSrc = (Button) findViewById(R.id.btnClearSrc);
+        btnClearSrc = (Button) findViewById(R.id.btnClearStop);
         btnClearSrc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,16 +119,7 @@ public class PathFinderActivity extends AppCompatActivity {
                 }
             }
         });
-        btnClearDestination = (Button) findViewById(R.id.btnClearDestination);
-        btnClearDestination.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!mDestTextView.getText().toString().equals("")) {
-                    mDestTextView.setText("");
-                    Log.d("PathFinder", "Clicked");
-                }
-            }
-        });
+
 
 
         initAdMob();
@@ -177,52 +142,5 @@ public class PathFinderActivity extends AppCompatActivity {
 
         // Start loading the ad in the background.
         mAdView.loadAd(adRequest);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
-    @Override
-    public void onPause() {
-        if (mAdView != null) {
-            mAdView.pause();
-        }
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mAdView != null) {
-            mAdView.resume();
-        }
-    }
-
-    @Override
-    public void onDestroy() { // To destroy adview
-        if (mAdView != null) {
-            mAdView.destroy();
-        }
-        super.onDestroy();
     }
 }

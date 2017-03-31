@@ -6,6 +6,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <!--
  The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -14,6 +15,10 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="23" />
     <application
         android:name=".util.PathFinderApplication"
         android:allowBackup="true"
@@ -23,7 +28,6 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <uses-library android:name="com.google.android.maps" />
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -35,6 +39,16 @@
             android:name=".activity.PathFinderActivity"
             android:label="@string/title_activity_path_finder"
             android:windowSoftInputMode="adjustPan">
+        </activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity android:name=".activity.MapsActivity" />
+        <activity android:name=".activity.ExpandableActivity" />
+        <activity android:name=".activity.BusStopActivity"
+                android:windowSoftInputMode="adjustPan"
+                android:label="@string/title_activity_path_finder">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -54,8 +68,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".activity.MapsActivity" />
-        <activity android:name=".activity.ExpandableActivity" />
     </application>
 
 </manifest>

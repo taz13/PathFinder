@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ExpandableListView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.appindexing.Action;
 import com.google.firebase.appindexing.FirebaseUserActions;
 import com.google.firebase.appindexing.builders.Actions;
@@ -29,24 +32,22 @@ import java.util.Map;
 public class ExpandableActivity extends Activity { // For Test Commit
 
     public static ExpandableActivity instance = null;
-    public Double sourceLatitude, sourceLongitude, destinationLatitude, destinationLongitude;
     Context context;
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     List<String> listPathHeader;
     HashMap<String, List<String>> listPathDetails;
+    String reqType;
+    String stopName;
     String source;
     String destination;
     String busStops[];
     ArrayList costList;
     private DatabaseReference dbRef;
-    private DatabaseReference latLongDbRef;
     private DatabaseReference shortestPathDbRef;
     private Map<String, String> shortestPathMap;
-
-    public static ExpandableActivity getInstance() {
-        return instance;
-    }
+    private AdView mAdView;
+    private DatabaseReference latLongDbRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,38 +58,61 @@ public class ExpandableActivity extends Activity { // For Test Commit
         expListView = (ExpandableListView) findViewById(R.id.lvExp);
 
         Intent intent = getIntent();
-        source = intent.getStringExtra("Source");
-        destination = intent.getStringExtra("Destination");
-
-
         dbRef = FirebaseDatabase.getInstance().getReference();
         latLongDbRef = dbRef.child("LatLong");
-        shortestPathDbRef = dbRef.child("ShortestPaths").child(source + ":" + destination);
+        reqType=intent.getStringExtra("reqType");
+        if (reqType.equals(R.string.shortestPath)) {
+            source = intent.getStringExtra("Source");
+            destination = intent.getStringExtra("Destination");
 
-        //DB Ref for shortest path
-        shortestPathDbRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                shortestPathMap = (Map<String, String>) dataSnapshot.getValue();
-                prepareListData();
-                listAdapter = new ExpandableListAdapter(getBaseContext(), listPathHeader, listPathDetails);
-                listAdapter.setSource(source);
-                listAdapter.setDestination(destination);
-                listAdapter.setKeyList(costList);
-                listAdapter.setPathMap(shortestPathMap);
-                expListView.setAdapter(listAdapter);
-            }
+            //DB Ref for shortest path
+            shortestPathDbRef = dbRef.child("ShortestPaths").child(source + ":" + destination);
+            shortestPathDbRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    shortestPathMap = (Map<String, String>) dataSnapshot.getValue();
+                    prepareRouteListData();
+                    listAdapter = new ExpandableListAdapter(getBaseContext(), listPathHeader, listPathDetails);
+                    listAdapter.setSource(source);
+                    listAdapter.setDestination(destination);
+                    listAdapter.setKeyList(costList);
+                    listAdapter.setPathMap(shortestPathMap);
+                    expListView.setAdapter(listAdapter);
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("DBREF", "Failed to read Shortest path list", databaseError.toException());
-            }
-        });
-
-
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w("DBREF", "Failed to read Shortest path list", databaseError.toException());
+                }
+            });
+        }
+        else
+        {
+            stopName=intent.getStringExtra("stopName");
+        }
+        initAdMob();
     }
 
-    private void prepareListData() {
+    private void initAdMob() {
+        // Initialize the Mobile Ads SDK.
+        MobileAds.initialize(this, getString(R.string.banner_ad_unit_id));
+
+        // Gets the ad view defined in layout/ad_fragment.xml with ad unit ID set in
+        // values/strings.xml.
+        mAdView = (AdView) findViewById(R.id.ad_view);
+
+        // Create an ad request. Check your logcat output for the hashed device ID to
+        // get test ads on a physical device. e.g.
+        // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+
+        // Start loading the ad in the background.
+        mAdView.loadAd(adRequest);
+    }
+
+    private void prepareRouteListData() {
         listPathDetails = new HashMap<String, List<String>>();
         listPathHeader = new ArrayList<>();
         //Add header
