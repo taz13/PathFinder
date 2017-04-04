@@ -130,8 +130,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         settings.setZoomControlsEnabled(true);
         settings.setIndoorLevelPickerEnabled(true);
         settings.setMapToolbarEnabled(true);
-        mMap.setMinZoomPreference(15.0f);
-        mMap.setMaxZoomPreference(20.0f);
+        // mMap.setMinZoomPreference(15.0f);
+        // mMap.setMaxZoomPreference(20.0f);
+
         // .icon(BitmapDescriptorFactory.fromResource(R.mipmap.medical)))
     }
 

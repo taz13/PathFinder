@@ -1,8 +1,8 @@
 package com.pioneers.pathfinder.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +26,7 @@ public class BusStopActivity extends AppCompatActivity {
     String TAG="Database setup";
 
     private Button findBusServices;
+    private Button findShortestPath;
     private AutoCompleteTextView mSourceTextView;
     private Button btnClearSrc;
     private AdView mAdView;
@@ -81,7 +82,7 @@ public class BusStopActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        //Adding event listener to the button
+        //Adding event listener to the find bus service button
         findBusServices = (Button) findViewById(R.id.btnFindBus);
 
         //setting onclick listener for find shortest path button
@@ -92,7 +93,7 @@ public class BusStopActivity extends AppCompatActivity {
                 Log.d("BusFinder", "Bus services found");
 
                 Intent showOnMap = new Intent(BusStopActivity.this, ExpandableActivity.class);
-                showOnMap.putExtra("reqType",R.string.busService);
+                showOnMap.putExtra("reqType", getString(R.string.busService));
                 showOnMap.putExtra("stopName", mSourceTextView.getText().toString());
                 startActivity(showOnMap);
             }
@@ -100,8 +101,22 @@ public class BusStopActivity extends AppCompatActivity {
 
         });
 
-        //Auto complete location code
+        //Adding event listener to the find shortest path button
+        findShortestPath = (Button) findViewById(R.id.btnFindRoute);
 
+        //setting onclick listener for find shortest path button
+
+        findShortestPath.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("PathFinder", "Finding shortest path");
+
+                Intent findPath = new Intent(BusStopActivity.this, PathFinderActivity.class);
+                startActivity(findPath);
+            }
+
+
+        });
 
 
         // Retrieve the AutoCompleteTextView that will display Source place suggestions.

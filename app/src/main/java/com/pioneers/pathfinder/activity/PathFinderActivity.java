@@ -2,25 +2,20 @@ package com.pioneers.pathfinder.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -111,7 +106,7 @@ public class PathFinderActivity extends AppCompatActivity {
                 Log.d("PathFinder", "Shortest path found");
 
                 Intent showOnMap = new Intent(PathFinderActivity.this, ExpandableActivity.class);
-                showOnMap.putExtra("reqType",R.string.shortestPath);
+                showOnMap.putExtra("reqType", getString(R.string.shortestPath));
                 showOnMap.putExtra("Source", mSourceTextView.getText().toString());
                 showOnMap.putExtra("Destination", mDestTextView.getText().toString());
                 startActivity(showOnMap);

@@ -54,22 +54,22 @@
                     style="@android:style/Widget.DeviceDefault.AutoCompleteTextView"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_toStartOf="@+id/btnClearStop"
                     android:completionThreshold="1"
                     android:elevation="9dp"
                     android:ellipsize="middle"
                     android:gravity="center|left"
-                    android:hint="Bus Stop"
-                    android:layout_toStartOf="@+id/btnClearStop" />
+                    android:hint="Bus Stop" />
 
                 <Button
                     android:id="@+id/btnClearStop"
                     android:layout_width="35dp"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
                     android:background="@android:color/transparent"
                     android:drawableRight="@android:drawable/ic_menu_close_clear_cancel"
-                    android:gravity="top|right"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true" />
+                    android:gravity="top|right" />
 
                 <Button
                     android:id="@+id/btnFindBus"
@@ -93,6 +93,16 @@
             android:layout_centerHorizontal="true"
             ads:adSize="BANNER"
             ads:adUnitId="@string/banner_ad_unit_id" />
+
+        <Button
+            android:id="@+id/btnFindRoute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/locationLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:elevation="23dp"
+            android:text="Find Route" />
 
     </RelativeLayout>
 

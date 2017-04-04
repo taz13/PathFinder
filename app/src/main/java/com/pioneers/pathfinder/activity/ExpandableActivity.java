@@ -61,7 +61,7 @@ public class ExpandableActivity extends Activity { // For Test Commit
         dbRef = FirebaseDatabase.getInstance().getReference();
         latLongDbRef = dbRef.child("LatLong");
         reqType=intent.getStringExtra("reqType");
-        if (reqType.equals(R.string.shortestPath)) {
+        if (reqType.equals(getString(R.string.shortestPath))) {
             source = intent.getStringExtra("Source");
             destination = intent.getStringExtra("Destination");
 
