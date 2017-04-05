@@ -15,6 +15,9 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -47,8 +50,8 @@
         <activity android:name=".activity.MapsActivity" />
         <activity android:name=".activity.ExpandableActivity" />
         <activity android:name=".activity.BusStopActivity"
-                android:windowSoftInputMode="adjustPan"
-                android:label="@string/title_activity_path_finder">
+            android:label="@string/title_activity_path_finder"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

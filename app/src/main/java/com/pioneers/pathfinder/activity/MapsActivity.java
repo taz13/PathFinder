@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.ConnectionResult;
@@ -55,6 +54,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Map<String, String> latLongMap;
     LatLng origin;
     LatLng dest;
+    DownloadTask downloadTask;
     private GoogleMap mMap;
     //Double toLatitude, toLongitude,fromLatutude,fromLongitude;
     private GoogleApiClient googleApiClient;
@@ -65,6 +65,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String source;
     private String destination;
     private String[] path;
+    private ArrayList<LatLng> busStopLatLng;
     private UiSettings settings;
 
     @Override
@@ -75,7 +76,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(MapsActivity.this);
-        // final_result = intent.getStringExtra("Result");
+
+        busStopLatLng = new ArrayList<LatLng>();
         Intent intent = getIntent();
         source = intent.getStringExtra("Source");
         destination = intent.getStringExtra("Destination");
@@ -130,8 +132,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         settings.setZoomControlsEnabled(true);
         settings.setIndoorLevelPickerEnabled(true);
         settings.setMapToolbarEnabled(true);
-        // mMap.setMinZoomPreference(15.0f);
-        // mMap.setMaxZoomPreference(20.0f);
+        mMap.setMinZoomPreference(15.0f);
+        //mMap.setMaxZoomPreference(20.0f);
 
         // .icon(BitmapDescriptorFactory.fromResource(R.mipmap.medical)))
     }
@@ -139,6 +141,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void getDirection() {
         // Toast.makeText(this,"this is url"+url,Toast.LENGTH_SHORT).show();
         //Showing a dialog till we get the route
+        downloadTask = new DownloadTask();
         origin = new LatLng(Double.valueOf(latLongMap.get(path[0]).split(",")[0]), Double.valueOf(latLongMap.get(path[0]).split(",")[1]));
         dest = new LatLng(Double.valueOf(latLongMap.get(path[path.length - 1]).split(",")[0]), Double.valueOf(latLongMap.get(path[path.length - 1]).split(",")[1]));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(origin));
@@ -146,14 +149,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             String[] latLong = latLongMap.get(stop).split(",");
             //adding marker to the map
             LatLng busStop = new LatLng(Double.valueOf(latLong[0]), Double.valueOf(latLong[1]));
+            if (!busStop.equals(origin) || !busStop.equals(dest)) {
+                busStopLatLng.add(busStop);
+            }
             mMap.addMarker(new MarkerOptions().position(busStop).title(stop));
-
         }
 
         // Getting URL to the Google Directions API
         String url = getDirectionsUrl(origin, dest);
 
-        DownloadTask downloadTask = new DownloadTask();
+
 
         // Start downloading json data from Google Directions API
         downloadTask.execute(url);
@@ -171,8 +176,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Sensor enabled
         String sensor = "sensor=false";
 
+        // Waypoints
+        String waypoints = "waypoints=";
+        for (int i = 0; i < busStopLatLng.size(); i++) {
+            LatLng point = busStopLatLng.get(i);
+            waypoints += point.latitude + "," + point.longitude + "|";
+        }
+
+
         // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + sensor;
+        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + waypoints;
 
         // Output format
         String output = "json";
@@ -331,14 +344,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
             ArrayList<LatLng> points = null;
             PolylineOptions lineOptions = null;
-            MarkerOptions markerOptions = new MarkerOptions();
-            String distance = "";
-            String duration = "";
-
-            if (result.size() < 1) {
-                Toast.makeText(getBaseContext(), "No Points", Toast.LENGTH_SHORT).show();
-                return;
-            }
 
             // Traversing through all the routes
             for (int i = 0; i < result.size(); i++) {
@@ -352,28 +357,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 for (int j = 0; j < path.size(); j++) {
                     HashMap<String, String> point = path.get(j);
 
-                    if (j == 0) {    // Get distance from the list
-                        distance = point.get("distance");
-                        continue;
-                    } else if (j == 1) { // Get duration from the list
-                        duration = point.get("duration");
-                        continue;
+                    if (point.size() == 2) {
+                        double lat = Double.parseDouble(point.get("lat"));
+                        double lng = Double.parseDouble(point.get("lng"));
+                        LatLng position = new LatLng(lat, lng);
+
+                        points.add(position);
                     }
-
-                    double lat = Double.parseDouble(point.get("lat"));
-                    double lng = Double.parseDouble(point.get("lng"));
-                    LatLng position = new LatLng(lat, lng);
-
-                    points.add(position);
                 }
 
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
-                lineOptions.width(10);
-                lineOptions.color(Color.rgb(255, 140, 0));
+                lineOptions.width(20);
+                lineOptions.color(Color.RED);
             }
-
-            //tvDistanceDuration.setText("Distance:" + distance + ", Duration:" + duration);
 
             // Drawing polyline in the Google Map for the i-th route
             mMap.addPolyline(lineOptions);
