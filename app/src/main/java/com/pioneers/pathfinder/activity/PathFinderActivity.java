@@ -22,6 +22,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.pioneers.pathfinder.R;
+
+import java.util.Map;
+import java.util.Set;
 //import com.pioneers.pathfinder.util.ApiConnector;
 
 
@@ -36,7 +39,7 @@ public class PathFinderActivity extends AppCompatActivity {
     private AutoCompleteTextView mDestTextView;
     private Button btnClearSrc, btnClearDestination;
     private AdView mAdView;
-    private String busStops[];
+    private Set busStops;
     private DatabaseReference busStopRef;
     private ArrayAdapter<String> adapterBusStop;
     @Override
@@ -48,7 +51,7 @@ public class PathFinderActivity extends AppCompatActivity {
 
 
             //Getting Database reference:
-            busStopRef = FirebaseDatabase.getInstance().getReference("BusStopNames");
+            busStopRef = FirebaseDatabase.getInstance().getReference("LatLong");
 
             // Read from the database
             busStopRef.addValueEventListener(new ValueEventListener() {
@@ -56,8 +59,8 @@ public class PathFinderActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     // This method is called once with the initial value and again
                     // whenever data at this location is updated.
-                    String value = dataSnapshot.getValue(String.class);
-                    busStops=value.split(":");
+                    Map value = (Map<String, String>) dataSnapshot.getValue();
+                    busStops = value.keySet();
                     adapterBusStop.addAll(busStops);
                     Log.d(TAG, "Value is: " + value);
                 }

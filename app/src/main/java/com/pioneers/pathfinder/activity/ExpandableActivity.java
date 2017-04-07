@@ -42,10 +42,12 @@ public class ExpandableActivity extends Activity { // For Test Commit
     String source;
     String destination;
     String busStops[];
-    ArrayList costList;
+    ArrayList keyList;
     private DatabaseReference dbRef;
     private DatabaseReference shortestPathDbRef;
+    private DatabaseReference busServiceDbRef;
     private Map<String, String> shortestPathMap;
+    private Map<String, String> busServiceMap;
     private AdView mAdView;
     private DatabaseReference latLongDbRef;
 
@@ -75,7 +77,7 @@ public class ExpandableActivity extends Activity { // For Test Commit
                     listAdapter = new ExpandableListAdapter(getBaseContext(), listPathHeader, listPathDetails);
                     listAdapter.setSource(source);
                     listAdapter.setDestination(destination);
-                    listAdapter.setKeyList(costList);
+                    listAdapter.setKeyList(keyList);
                     listAdapter.setPathMap(shortestPathMap);
                     expListView.setAdapter(listAdapter);
                 }
@@ -85,14 +87,33 @@ public class ExpandableActivity extends Activity { // For Test Commit
                     Log.w("DBREF", "Failed to read Shortest path list", databaseError.toException());
                 }
             });
-        }
-        else
+        } else if (reqType.equals(getString(R.string.busService)))
         {
             stopName=intent.getStringExtra("stopName");
+
+            //DB Ref for shortest path
+            busServiceDbRef = dbRef.child("BusServices");
+            busServiceDbRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    busServiceMap = (Map<String, String>) dataSnapshot.getValue();
+                    prepareBusServiceListData();
+                    listAdapter = new ExpandableListAdapter(getBaseContext(), listPathHeader, listPathDetails);
+                    listAdapter.setSource(busServiceMap.get(keyList.get(0)));
+                    listAdapter.setDestination(busServiceMap.get(keyList.get(keyList.size() - 1)));
+                    listAdapter.setKeyList(keyList);
+                    listAdapter.setPathMap(busServiceMap);
+                    expListView.setAdapter(listAdapter);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w("DBREF", "Failed to read Shortest path list", databaseError.toException());
+                }
+            });
         }
         initAdMob();
     }
-
     private void initAdMob() {
         // Initialize the Mobile Ads SDK.
         MobileAds.initialize(this, getString(R.string.banner_ad_unit_id));
@@ -112,17 +133,18 @@ public class ExpandableActivity extends Activity { // For Test Commit
         mAdView.loadAd(adRequest);
     }
 
+    //format shortest path data
     private void prepareRouteListData() {
         listPathDetails = new HashMap<String, List<String>>();
         listPathHeader = new ArrayList<>();
         //Add header
-        costList = new ArrayList<>(shortestPathMap.keySet());
+        keyList = new ArrayList<>(shortestPathMap.keySet());
         ArrayList temp = new ArrayList();
         for (int i = 0; i < shortestPathMap.size(); i++) {
             listPathHeader.add("Route " + (i + 1));
-            busStops = shortestPathMap.get(costList.get(i)).split(":");
+            busStops = shortestPathMap.get(keyList.get(i)).split(":");
             StringBuilder buildRoute = new StringBuilder("");
-            buildRoute.append("Cost: " + costList.get(i) + "\n");
+            buildRoute.append("Cost: " + keyList.get(i) + "\n");
             buildRoute.append("Number of stops: " + busStops.length + "\n");
             buildRoute.append("Route:\n");
             for (int j = 0; j < busStops.length; j++) {
@@ -133,6 +155,28 @@ public class ExpandableActivity extends Activity { // For Test Commit
             listPathDetails.put(listPathHeader.get(i), temp);
         }
 
+
+    }
+
+    //Formatting bus service data
+    private void prepareBusServiceListData() {
+        listPathDetails = new HashMap<String, List<String>>();
+        listPathHeader = new ArrayList<>();
+        //Add header
+        keyList = new ArrayList<>(busServiceMap.keySet());
+        ArrayList temp = new ArrayList();
+        for (int i = 0; i < busServiceMap.size(); i++) {
+            listPathHeader.add((String) keyList.get(i));
+            busStops = busServiceMap.get(keyList.get(i)).split(":");
+            StringBuilder buildRoute = new StringBuilder("");
+            buildRoute.append("Stops:\n");
+            for (int j = 0; j < busStops.length; j++) {
+                buildRoute.append("\t" + (j + 1) + ". " + busStops[j] + "\n");
+            }
+            temp.clear();
+            temp.add(buildRoute.toString());
+            listPathDetails.put(listPathHeader.get(i), (ArrayList<String>) temp.clone());
+        }
 
     }
 
