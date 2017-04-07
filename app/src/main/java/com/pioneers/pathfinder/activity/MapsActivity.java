@@ -132,6 +132,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         settings.setZoomControlsEnabled(true);
         settings.setIndoorLevelPickerEnabled(true);
         settings.setMapToolbarEnabled(true);
+        //mMap.animateCamera(CameraUpdateFactory.zoomTo(12.0f));
         mMap.setMinZoomPreference(15.0f);
         //mMap.setMaxZoomPreference(20.0f);
 
@@ -185,7 +186,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + waypoints;
+        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + waypoints + "&key=" + getString(R.string.mapDirectionKey);
 
         // Output format
         String output = "json";
@@ -368,7 +369,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
-                lineOptions.width(20);
+                lineOptions.width(15);
                 lineOptions.color(Color.RED);
             }
 
