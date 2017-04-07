@@ -29,12 +29,21 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private ArrayList<String> keyList;
     private String source;
     private String destination;
+    private String type;
 
     public ExpandableListAdapter(Context context, List<String> listDataHeader,
                                  HashMap<String, List<String>> listChildData) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override
@@ -57,7 +66,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition)).get(0);
+        return this._listDataChild.get(this._listDataHeader.get(groupPosition)).get(childPosition);
     }
     /*
     @Override
@@ -115,11 +124,16 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         txtListChild.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String path = pathMap.get(_listDataHeader.get(groupPosition));
+                if (type.equals("busservice")) {
+                    source = path.split(":")[0];
+                    destination = path.split(":")[path.split(":").length - 1];
+                }
                 Intent intent = new Intent(_context, MapsActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("Source", source);
                 intent.putExtra("Destination", destination);
-                intent.putExtra("Path", pathMap.get(keyList.get(groupPosition)));
+                intent.putExtra("Path", path);
                 _context.startActivity(intent);
                 Toast.makeText(_context, txtListChild.getText().toString(), Toast.LENGTH_LONG).show();
             }

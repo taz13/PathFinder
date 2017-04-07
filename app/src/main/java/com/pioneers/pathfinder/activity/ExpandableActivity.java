@@ -26,9 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Taslima on 10/17/2015.
- */
+
 public class ExpandableActivity extends Activity { // For Test Commit
 
     public static ExpandableActivity instance = null;
@@ -79,6 +77,7 @@ public class ExpandableActivity extends Activity { // For Test Commit
                     listAdapter.setDestination(destination);
                     listAdapter.setKeyList(keyList);
                     listAdapter.setPathMap(shortestPathMap);
+                    listAdapter.setType(getString(R.string.shortestPath));
                     expListView.setAdapter(listAdapter);
                 }
 
@@ -99,10 +98,11 @@ public class ExpandableActivity extends Activity { // For Test Commit
                     busServiceMap = (Map<String, String>) dataSnapshot.getValue();
                     prepareBusServiceListData();
                     listAdapter = new ExpandableListAdapter(getBaseContext(), listPathHeader, listPathDetails);
-                    listAdapter.setSource(busServiceMap.get(keyList.get(0)));
-                    listAdapter.setDestination(busServiceMap.get(keyList.get(keyList.size() - 1)));
+                    listAdapter.setSource(source);
+                    listAdapter.setDestination(destination);
                     listAdapter.setKeyList(keyList);
                     listAdapter.setPathMap(busServiceMap);
+                    listAdapter.setType(getString(R.string.busService));
                     expListView.setAdapter(listAdapter);
                 }
 
@@ -166,16 +166,18 @@ public class ExpandableActivity extends Activity { // For Test Commit
         keyList = new ArrayList<>(busServiceMap.keySet());
         ArrayList temp = new ArrayList();
         for (int i = 0; i < busServiceMap.size(); i++) {
-            listPathHeader.add((String) keyList.get(i));
-            busStops = busServiceMap.get(keyList.get(i)).split(":");
-            StringBuilder buildRoute = new StringBuilder("");
-            buildRoute.append("Stops:\n");
-            for (int j = 0; j < busStops.length; j++) {
-                buildRoute.append("\t" + (j + 1) + ". " + busStops[j] + "\n");
+            if (busServiceMap.get(keyList.get(i)).contains(stopName)) {
+                listPathHeader.add((String) keyList.get(i));
+                busStops = busServiceMap.get(keyList.get(i)).split(":");
+                StringBuilder buildRoute = new StringBuilder("");
+                buildRoute.append("Stops:\n");
+                for (int j = 0; j < busStops.length; j++) {
+                    buildRoute.append("\t" + (j + 1) + ". " + busStops[j] + "\n");
+                }
+                temp.clear();
+                temp.add(buildRoute.toString());
+                listPathDetails.put((String) keyList.get(i), (ArrayList<String>) temp.clone());
             }
-            temp.clear();
-            temp.add(buildRoute.toString());
-            listPathDetails.put(listPathHeader.get(i), (ArrayList<String>) temp.clone());
         }
 
     }
