@@ -10,6 +10,10 @@
           <option name="url" value="https://github.com/edsilfer/custom-searchable.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/dmilicic/Android-Clean-Boilerplate.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
     <option name="cloneParentDir" value="C:\Users\trahman\StudioProjects" />
